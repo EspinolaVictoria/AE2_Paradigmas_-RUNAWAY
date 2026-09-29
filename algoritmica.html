@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUNAWAY - Algorítmica JavaScript</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="barra-superior">
+        <a class="marca" href="index.html">RUNAWAY</a>
+        <ul class="menu-principal">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="listado_box.html">Colección</a></li>
+            <li><a href="comprar.html">Comprar</a></li>
+            <li><a href="inventario.html">Inventario</a></li>
+        </ul>
+    </nav>
+
+    <main class="algoritmica-page">
+        <section class="algoritmica-heading">
+            <p class="kicker">JAVASCRIPT / PARTE A</p>
+            <h1>Operación numérica</h1>
+            <p>Ingreso de dos valores numéricos, cálculo en memoria y actualización dinámica del DOM sin recargar la página.</p>
+        </section>
+
+        <section class="algoritmica-card">
+            <div class="algoritmica-form">
+                <div class="field-group">
+                    <label for="valor1">Primer valor</label>
+                    <input type="number" id="valor1" placeholder="Ej.: 10">
+                </div>
+
+                <div class="field-group">
+                    <label for="valor2">Segundo valor</label>
+                    <input type="number" id="valor2" placeholder="Ej.: -4">
+                </div>
+
+                <button type="button" id="botonCalcular" class="btn-principal full">Calcular suma</button>
+            </div>
+
+            <div class="resultado-card">
+                <span class="resultado-label">Resultado</span>
+                <span id="resultado" class="resultado cero">0 (cero)</span>
+                <p>El resultado se modifica directamente en este nodo HTML mediante JavaScript.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pie"><span>RUNAWAY © 2026</span><span>JavaScript Vanilla / DOM</span></footer>
+    <script src="app.js" defer></script>
+</body>
+</html>

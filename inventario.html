@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUNAWAY - Inventario</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="barra-superior">
+        <a class="marca" href="index.html">RUNAWAY</a>
+        <ul class="menu-principal">
+            <li><a href="index.html">Inicio</a></li>
+            <li class="dropdown">
+                <a href="listado_box.html">Colección</a>
+                <ul class="menu-desplegable">
+                    <li><a href="listado_box.html">Todos los productos</a></li>
+                    <li><a href="producto.html">Pieza destacada</a></li>
+                </ul>
+            </li>
+            <li><a href="comprar.html">Comprar</a></li>
+            <li><a href="inventario.html" aria-current="page">Inventario</a></li>
+        </ul>
+    </nav>
+
+    <main class="inventario-page">
+        <header class="inventario-heading">
+            <div>
+                <p class="kicker">OPERATIONS / INVENTORY</p>
+                <h1>Monitor de inventario</h1>
+                <p>
+                    Seguimiento del stock disponible de la colección y detección visual
+                    de productos que se encuentran por debajo del umbral crítico.
+                </p>
+            </div>
+            <span class="inventario-codigo">STOCK / 01</span>
+        </header>
+
+        <section class="inventario-indicadores" aria-label="Indicadores generales del inventario">
+            <article class="indicador-stock">
+                <span>Unidades totales</span>
+                <strong id="totalUnidades">0</strong>
+            </article>
+            <article class="indicador-stock">
+                <span>Productos críticos</span>
+                <strong id="totalCriticos">0</strong>
+            </article>
+            <article class="indicador-stock">
+                <span>Productos disponibles</span>
+                <strong id="totalDisponibles">0</strong>
+            </article>
+        </section>
+
+        <section class="inventario-panel">
+            <div class="inventario-toolbar">
+                <div class="field-group inventario-filtro">
+                    <label for="filtroInventario">Mostrar productos</label>
+                    <select id="filtroInventario">
+                        <option value="todos">Todos</option>
+                        <option value="criticos">Stock crítico</option>
+                        <option value="disponibles">Disponibles</option>
+                    </select>
+                </div>
+
+                <button type="button" id="recargarInventario" class="btn-secundario">
+                    Recargar datos
+                </button>
+            </div>
+
+            <p id="alertaInventario" class="alerta-inventario" aria-live="polite">
+                Consultando estado del inventario...
+            </p>
+
+            <div class="tabla-responsive">
+                <table class="tabla-productos tabla-inventario">
+                    <caption class="visually-hidden">
+                        Estado de stock y umbral crítico de los productos RUNAWAY
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Ref.</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Stock</th>
+                            <th scope="col">Umbral crítico</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Ajuste</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoInventario">
+                        <tr>
+                            <td colspan="6" class="estado-carga-inventario">
+                                Cargando inventario...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="nota-inventario">
+                Los botones de ajuste modifican el stock en memoria durante la sesión.
+                Al recargar los datos se restaura la información almacenada en el archivo JSON.
+            </p>
+        </section>
+    </main>
+
+    <footer class="pie">
+        <span>RUNAWAY © 2026</span>
+        <span>Inventory / Operations</span>
+    </footer>
+
+    <script src="app.js" defer></script>
+</body>
+</html>

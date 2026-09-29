@@ -1,0 +1,53 @@
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="metalPink" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#100a10"/>
+    <stop offset="0.16" stop-color="#ff9bcf"/>
+    <stop offset="0.31" stop-color="#6f284f"/>
+    <stop offset="0.46" stop-color="#ffd8eb"/>
+    <stop offset="0.58" stop-color="#210b1c"/>
+    <stop offset="0.74" stop-color="#d44a9a"/>
+    <stop offset="0.88" stop-color="#f7c7df"/>
+    <stop offset="1" stop-color="#160a14"/>
+  </linearGradient>
+  <linearGradient id="metalViolet" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0" stop-color="#06060a"/>
+    <stop offset="0.18" stop-color="#a653d6"/>
+    <stop offset="0.33" stop-color="#efd5ff"/>
+    <stop offset="0.49" stop-color="#29103a"/>
+    <stop offset="0.68" stop-color="#613485"/>
+    <stop offset="0.84" stop-color="#d798ff"/>
+    <stop offset="1" stop-color="#09070d"/>
+  </linearGradient>
+  <linearGradient id="metalSilver" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#090a0d"/>
+    <stop offset="0.13" stop-color="#c8d4dd"/>
+    <stop offset="0.27" stop-color="#4d5863"/>
+    <stop offset="0.41" stop-color="#f2f6f8"/>
+    <stop offset="0.55" stop-color="#292f35"/>
+    <stop offset="0.72" stop-color="#91a1ad"/>
+    <stop offset="0.87" stop-color="#eaf0f4"/>
+    <stop offset="1" stop-color="#08090b"/>
+  </linearGradient>
+  <radialGradient id="shine" cx="35%" cy="25%" r="65%">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+    <stop offset="0.15" stop-color="#ffffff" stop-opacity="0.32"/>
+    <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.05"/>
+    <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="22" result="blur"/>
+    <feOffset dy="24" result="offset"/>
+    <feColorMatrix in="offset" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .7 0"/>
+    <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<g filter="url(#softShadow)">
+  <path d="M640 44C758 26 891 97 944 206C994 308 956 418 870 468C789 515 750 474 681 506C600 543 582 654 478 686C370 719 235 667 190 570C146 474 205 407 218 327C232 241 170 177 226 110C292 30 422 83 514 75C565 70 594 51 640 44Z" fill="url(#metalPink)"/>
+  <path d="M238 512C330 479 437 511 473 597C509 684 456 799 352 854C249 909 115 877 66 786C19 697 78 609 159 558C190 538 214 521 238 512Z" fill="url(#metalViolet)"/>
+  <path d="M704 610C787 580 894 628 931 715C967 798 918 902 824 942C733 981 631 938 605 852C581 773 622 640 704 610Z" fill="url(#metalSilver)"/>
+</g>
+<path d="M640 44C758 26 891 97 944 206C994 308 956 418 870 468C789 515 750 474 681 506C600 543 582 654 478 686C370 719 235 667 190 570C146 474 205 407 218 327C232 241 170 177 226 110C292 30 422 83 514 75C565 70 594 51 640 44Z" fill="url(#shine)" opacity="0.58"/>
+<ellipse cx="670" cy="188" rx="164" ry="72" fill="#fff" opacity="0.12" transform="rotate(-18 670 188)"/>
+<ellipse cx="256" cy="659" rx="92" ry="41" fill="#fff" opacity="0.14" transform="rotate(-23 256 659)"/>
+</svg>

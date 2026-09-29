@@ -1,0 +1,26 @@
+[
+    {
+        "id": "001",
+        "nombre": "Nocturne Hoodie",
+        "categoria": "Hoodie",
+        "stock": 3,
+        "umbralCritico": 5,
+        "precio": 245000
+    },
+    {
+        "id": "002",
+        "nombre": "Obsidian Tee",
+        "categoria": "Tee",
+        "stock": 12,
+        "umbralCritico": 5,
+        "precio": 135000
+    },
+    {
+        "id": "003",
+        "nombre": "Armor Cargo",
+        "categoria": "Cargo",
+        "stock": 2,
+        "umbralCritico": 4,
+        "precio": 289000
+    }
+]

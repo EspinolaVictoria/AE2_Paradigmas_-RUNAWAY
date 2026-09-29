@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUNAWAY - Comprar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="barra-superior">
+        <a class="marca" href="index.html">RUNAWAY</a>
+        <ul class="menu-principal">
+            <li><a href="index.html">Inicio</a></li>
+            <li class="dropdown">
+                <a href="listado_box.html">Colección</a>
+                <ul class="menu-desplegable">
+                    <li><a href="listado_box.html">Todos los productos</a></li>
+                    <li><a href="producto.html">Pieza destacada</a></li>
+                </ul>
+            </li>
+            <li><a href="comprar.html">Comprar</a></li>
+            <li><a href="inventario.html">Inventario</a></li>
+        </ul>
+    </nav>
+
+    <main class="checkout-page">
+        <section class="checkout-heading">
+            <p class="kicker">CHECKOUT / RUNAWAY</p>
+            <h1>Finalizar compra</h1>
+            <p>Completá tus datos y revisá el pedido antes de confirmar.</p>
+        </section>
+
+        <section class="checkout-layout">
+            <div class="checkout-form-card">
+                <form class="formulario-compra" action="#" method="POST">
+                    <div class="field-group">
+                        <label for="nombre">Nombre del cliente</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Nombre y apellido" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" id="direccion" name="direccion" placeholder="Dirección de entrega" required>
+                    </div>
+                    <div class="fields-two">
+                        <div class="field-group"><label for="telefono">Teléfono</label><input type="tel" id="telefono" name="telefono" placeholder="3764 000000" required></div>
+                        <div class="field-group"><label for="email">E-mail</label><input type="email" id="email" name="email" placeholder="nombre@email.com" required></div>
+                    </div>
+                    <div class="field-group">
+                        <label for="pago">Medio de pago</label>
+                        <select id="pago" name="pago" required>
+                            <option value="">Seleccionar</option>
+                            <option value="credito">Tarjeta de crédito</option>
+                            <option value="debito">Tarjeta de débito</option>
+                            <option value="transferencia">Transferencia bancaria</option>
+                            <option value="mercadopago">Mercado Pago</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label for="cantidadProducto">Cantidad</label>
+                        <input type="number" id="cantidadProducto" name="cantidadProducto" min="1" value="1">
+                    </div>
+                    <div class="field-group">
+                        <label for="productos">Listado de productos</label>
+                        <textarea id="productos" name="productos" rows="4" readonly>1 x Nocturne Hoodie / Talle M / $245.000</textarea>
+                    </div>
+                    <div class="field-group">
+                        <label for="codigoCupon">Código de descuento</label>
+                        <input type="text" id="codigoCupon" name="codigoCupon" placeholder="Ingresá tu cupón">
+                        <p id="mensajeCupon" class="mensaje-cupon" aria-live="polite"></p>
+                        <button type="button" id="botonCupon" class="btn-secundario">Aplicar cupón</button>
+                    </div>
+                    <button class="btn-principal full" type="submit">Confirmar pedido →</button>
+                </form>
+            </div>
+
+            <aside class="order-card">
+                <div class="order-image"><img src="assets/campaign-batman.jpg" alt="Nocturne Hoodie"></div>
+                <div class="order-title"><span>001 / HOODIE</span><h2>Nocturne Hoodie</h2></div>
+                <div class="order-row"><span>Talle</span><strong>M</strong></div>
+                <div class="order-row"><span>Precio unitario</span><strong>$245.000</strong></div>
+                <div class="order-row"><span>Subtotal</span><strong id="subtotalProducto">$245.000</strong></div>
+                <div class="order-total"><span>Total</span><strong id="totalProducto">$245.000</strong></div>
+            </aside>
+        </section>
+    </main>
+
+    <footer class="pie"><span>RUNAWAY © 2026</span><span>Secure checkout</span></footer>
+    <script src="app.js" defer></script>
+</body>
+</html>
