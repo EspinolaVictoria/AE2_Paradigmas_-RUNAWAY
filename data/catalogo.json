@@ -1,0 +1,35 @@
+[
+  {
+    "ref": "001",
+    "nombre": "Nocturne Hoodie",
+    "subtitulo": "Heavyweight / Black",
+    "categoria": "Hoodies",
+    "especificacion": "Algodón premium · calce oversized · acabado lavado · construcción estructurada",
+    "talles": "S · M · L · XL",
+    "precio": 245000,
+    "imagen": "assets/campaign-batman.jpg",
+    "enlace": "producto.html"
+  },
+  {
+    "ref": "002",
+    "nombre": "Obsidian Tee",
+    "subtitulo": "Heavy Cotton / Black",
+    "categoria": "Remeras",
+    "especificacion": "Algodón compacto · hombro caído · cuello reforzado · gráfica tonal",
+    "talles": "S · M · L · XL",
+    "precio": 135000,
+    "imagen": "assets/campaign-head.jpg",
+    "enlace": "producto.html"
+  },
+  {
+    "ref": "003",
+    "nombre": "Armor Cargo",
+    "subtitulo": "Utility / Charcoal",
+    "categoria": "Pantalones",
+    "especificacion": "Gabardina técnica · bolsillos de volumen · ajuste lateral · corte wide",
+    "talles": "28 · 30 · 32 · 34",
+    "precio": 289000,
+    "imagen": "assets/campaign-detail.jpg",
+    "enlace": "producto.html"
+  }
+]
