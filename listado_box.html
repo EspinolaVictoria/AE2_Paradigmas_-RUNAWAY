@@ -52,7 +52,20 @@
                     <p class="kicker">PRODUCT INDEX</p>
                     <h2>Available pieces</h2>
                 </div>
-                <span>03 ITEMS / DROP 01</span>
+                <span id="contadorCatalogo">CARGANDO...</span>
+            </div>
+            <div class="buscadorCatalogo">
+                <div class="field-group buscadorTexto">
+                    <label for="buscarProducto">Buscar pieza</label>
+                    <input type="search" id="buscarProducto" placeholder="Nombre, referencia o material" autocomplete="off">
+                </div>
+                <div class="field-group buscadorCategoria">
+                    <label for="filtroCategoria">Categoría</label>
+                    <select id="filtroCategoria">
+                        <option value="todas">Todas</option>
+                    </select>
+                </div>
+                <button type="button" id="limpiarBusqueda" class="btn-secundario">Limpiar</button>
             </div>
             <div class="tabla-responsive">
                 <table class="tabla-productos">
@@ -67,34 +80,8 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>001</td>
-                            <td><img src="assets/campaign-batman.jpg" alt="Nocturne Hoodie"></td>
-                            <td><strong>Nocturne Hoodie</strong><small>Heavyweight / Black</small></td>
-                            <td>Algodón premium · calce oversized · acabado lavado · construcción estructurada</td>
-                            <td>S · M · L · XL</td>
-                            <td>$245.000</td>
-                            <td><a href="producto.html">Ver pieza →</a></td>
-                        </tr>
-                        <tr>
-                            <td>002</td>
-                            <td><img src="assets/campaign-head.jpg" alt="Obsidian Tee"></td>
-                            <td><strong>Obsidian Tee</strong><small>Heavy Cotton / Black</small></td>
-                            <td>Algodón compacto · hombro caído · cuello reforzado · gráfica tonal</td>
-                            <td>S · M · L · XL</td>
-                            <td>$135.000</td>
-                            <td><a href="producto.html">Ver pieza →</a></td>
-                        </tr>
-                        <tr>
-                            <td>003</td>
-                            <td><img src="assets/campaign-detail.jpg" alt="Armor Cargo"></td>
-                            <td><strong>Armor Cargo</strong><small>Utility / Charcoal</small></td>
-                            <td>Gabardina técnica · bolsillos de volumen · ajuste lateral · corte wide</td>
-                            <td>28 · 30 · 32 · 34</td>
-                            <td>$289.000</td>
-                            <td><a href="producto.html">Ver pieza →</a></td>
-                        </tr>
+                    <tbody id="cuerpoCatalogo">
+                        <tr><td colspan="7" class="mensajeCatalogo">Cargando catálogo...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -102,5 +89,6 @@
     </main>
 
     <footer class="pie"><span>RUNAWAY © 2026</span><span>Chapter 01 / Nocturne</span></footer>
+    <script src="buscador.js" defer></script>
 </body>
 </html>

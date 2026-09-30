@@ -809,3 +809,22 @@ img { display: block; max-width: 100%; }
         width: 100%;
     }
 }
+
+
+/* catalogo de filtros consigna 3 (listado_box.html) */
+.buscadorCatalogo { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 18px; }
+.buscadorTexto { flex: 2; }
+.buscadorCategoria { flex: 1; }
+.buscadorCatalogo label { font: 9px "Courier New", monospace; text-transform: uppercase; letter-spacing: .6px; color: #aaa4a0; }
+.buscadorCatalogo input,
+.buscadorCatalogo select {
+    width: 100%; padding: 13px 15px; border: 1px solid #2c2c2e; border-radius: 16px;
+    background: #111113; color: #f2ede8; font-family: Arial, Helvetica, sans-serif;
+}
+.buscadorCatalogo input:focus,
+.buscadorCatalogo select:focus { outline: none; border-color: #c178a5; }
+.mensajeCatalogo { padding: 48px 16px; text-align: center; color: #aaa49f; }
+
+@media (max-width: 720px) {
+    .buscadorCatalogo { flex-direction: column; align-items: stretch; }
+}
