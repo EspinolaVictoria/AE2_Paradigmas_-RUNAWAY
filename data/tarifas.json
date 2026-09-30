@@ -1,0 +1,15 @@
+{
+  "productos": {
+    "nocturne-hoodie": {
+      "nombre": "Nocturne Hoodie",
+      "talle": "M",
+      "precioUnitario": 245000
+    }
+  },
+  "descuentos": {
+    "UCP10": {
+      "porcentaje": 10,
+      "descripcion": "10% de descuento"
+    }
+  }
+}
