@@ -1,119 +1,175 @@
-/*
- * buscador.js - Buscador y filtro de catálogo en tiempo real
- * Dependencia: data/catalogo.json
- */
+document.addEventListener("DOMContentLoaded", function () {
+    const campoBuscar = document.getElementById("campoBuscar");
+    const selectCategoria = document.getElementById("selectCategoria");
+    const botonLimpiar = document.getElementById("botonLimpiar");
+    const cuerpoCatalogo = document.getElementById("cuerpoCatalogo");
+    const contadorCatalogo = document.getElementById("contadorCatalogo");
 
-// Referencias del DOM
-const campoBuscar      = document.getElementById("buscarProducto");
-const selectCategoria  = document.getElementById("filtroCategoria");
-const botonLimpiar     = document.getElementById("limpiarBusqueda");
-const cuerpoCatalogo   = document.getElementById("cuerpoCatalogo");
-const contadorCatalogo = document.getElementById("contadorCatalogo");
-
-// Estado del catálogo (se carga una sola vez)
-let catalogo = [];
-
-// Fetch inicial de datos
-async function cargarCatalogo() {
-    mostrarMensaje("Cargando catálogo...");
-
-    try {
-        const respuesta = await fetch("data/catalogo.json");
-        if (!respuesta.ok) throw new Error("Error HTTP: " + respuesta.status);
-
-        catalogo = await respuesta.json();
-        cargarCategorias();
-        aplicarFiltros();
-    } catch (error) {
-        mostrarMensaje("No se pudo cargar el catálogo. ¿Está corriendo el servidor local?");
-        contadorCatalogo.textContent = "ERROR DE CARGA";
-        console.error(error);
+    if (!campoBuscar || !selectCategoria || !botonLimpiar || !cuerpoCatalogo) {
+        return;
     }
-}
 
-// Normaliza texto para búsqueda (quita tildes y pasa a minúsculas)
-function normalizar(texto) {
-    return texto
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-}
+    let catalogo = [];
 
-// Filtra el array en memoria según el texto y la categoría elegida
-function aplicarFiltros() {
-    const textoBuscado = normalizar(campoBuscar.value.trim());
-    const categoriaElegida = selectCategoria.value;
+    function normalizar(texto) {
+        return String(texto)
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+    }
 
-    const resultado = catalogo.filter(producto => {
-        const coincideCategoria = categoriaElegida === "todas" || producto.categoria === categoriaElegida;
-        
-        // Unimos los campos relevantes para buscar en todos lados a la vez
-        const textoDelProducto = normalizar(
-            `${producto.ref} ${producto.nombre} ${producto.subtitulo} ${producto.categoria} ${producto.especificacion}`
+    function formatearPrecio(valor) {
+        return "$" + Number(valor).toLocaleString("es-AR");
+    }
+
+    function cargarCategorias() {
+        const categorias = [...new Set(catalogo.map(function (producto) {
+            return producto.categoria;
+        }))];
+
+        categorias.forEach(function (categoria) {
+            const opcion = document.createElement("option");
+            opcion.value = categoria;
+            opcion.textContent = categoria;
+            selectCategoria.appendChild(opcion);
+        });
+    }
+
+    function crearCeldaTexto(texto) {
+        const celda = document.createElement("td");
+        celda.textContent = texto;
+        return celda;
+    }
+
+    function crearFilaProducto(producto) {
+        const fila = document.createElement("tr");
+
+        const referencia = crearCeldaTexto(producto.ref);
+
+        const visual = document.createElement("td");
+        const imagen = document.createElement("img");
+        imagen.src = producto.imagen;
+        imagen.alt = producto.nombre;
+        visual.appendChild(imagen);
+
+        const productoCelda = document.createElement("td");
+        const nombre = document.createElement("strong");
+        const subtitulo = document.createElement("small");
+        nombre.textContent = producto.nombre;
+        subtitulo.textContent = producto.subtitulo;
+        productoCelda.append(nombre, subtitulo);
+
+        const especificacion = crearCeldaTexto(producto.especificacion);
+        const talles = crearCeldaTexto(producto.talles);
+        const precio = crearCeldaTexto(formatearPrecio(producto.precio));
+
+        const accion = document.createElement("td");
+        const enlace = document.createElement("a");
+        enlace.href = producto.enlace;
+        enlace.textContent = "Ver pieza →";
+        accion.appendChild(enlace);
+
+        fila.append(
+            referencia,
+            visual,
+            productoCelda,
+            especificacion,
+            talles,
+            precio,
+            accion
         );
-        const coincideTexto = textoDelProducto.includes(textoBuscado);
 
-        return coincideCategoria && coincideTexto;
-    });
-
-    mostrarProductos(resultado);
-}
-
-// Renderiza la tabla con los resultados
-function mostrarProductos(lista) {
-    if (lista.length === 0) {
-        mostrarMensaje("No se encontraron piezas con esa búsqueda.");
-    } else {
-        cuerpoCatalogo.innerHTML = lista.map(crearFila).join("");
+        return fila;
     }
 
-    contadorCatalogo.textContent = `${lista.length} DE ${catalogo.length} ITEMS / DROP 01`;
-}
+    function mostrarMensajeTabla(mensaje) {
+        cuerpoCatalogo.replaceChildren();
 
-// Template para cada fila de producto
-function crearFila(producto) {
-    return `
-        <tr>
-            <td>${producto.ref}</td>
-            <td><img src="${producto.imagen}" alt="${producto.nombre}"></td>
-            <td><strong>${producto.nombre}</strong><small>${producto.subtitulo}</small></td>
-            <td>${producto.especificacion}</td>
-            <td>${producto.talles}</td>
-            <td>$${producto.precio.toLocaleString("es-AR")}</td>
-            <td><a href="${producto.enlace}">Ver pieza →</a></td>
-        </tr>`;
-}
+        const fila = document.createElement("tr");
+        const celda = document.createElement("td");
+        celda.colSpan = 7;
+        celda.className = "catalogo-sin-resultados";
+        celda.textContent = mensaje;
 
-// Mensajes de estado en la tabla (cargando, error, sin resultados)
-function mostrarMensaje(texto) {
-    cuerpoCatalogo.innerHTML = `<tr><td colspan="7" class="mensajeCatalogo">${texto}</td></tr>`;
-}
+        fila.appendChild(celda);
+        cuerpoCatalogo.appendChild(fila);
+    }
 
-// Extrae categorías únicas de los datos y llena el select
-function cargarCategorias() {
-    const categorias = [...new Set(catalogo.map(p => p.categoria))];
+    function mostrarProductos(productos) {
+        cuerpoCatalogo.replaceChildren();
 
-    categorias.forEach(categoria => {
-        const opcion = document.createElement("option");
-        opcion.value = categoria;
-        opcion.textContent = categoria;
-        selectCategoria.appendChild(opcion);
-    });
-}
+        if (productos.length === 0) {
+            mostrarMensajeTabla("No se encontraron piezas con esa búsqueda.");
+        } else {
+            productos.forEach(function (producto) {
+                cuerpoCatalogo.appendChild(crearFilaProducto(producto));
+            });
+        }
 
-// Resetea los filtros y devuelve el foco al input
-function limpiarBusqueda() {
-    campoBuscar.value = "";
-    selectCategoria.value = "todas";
-    aplicarFiltros();
-    campoBuscar.focus();
-}
+        if (contadorCatalogo) {
+            contadorCatalogo.textContent =
+                productos.length + " DE " + catalogo.length + " ITEMS / DROP 01";
+        }
+    }
 
-// Init de eventos (solo si estamos en la página correcta
-if (cuerpoCatalogo && campoBuscar && selectCategoria) {
+    function aplicarFiltros() {
+        const textoBuscado = normalizar(campoBuscar.value.trim());
+        const categoriaElegida = selectCategoria.value;
+
+        const resultado = catalogo.filter(function (producto) {
+            const coincideCategoria =
+                categoriaElegida === "todas" ||
+                producto.categoria === categoriaElegida;
+
+            const textoDelProducto = [
+                producto.ref,
+                producto.nombre,
+                producto.subtitulo,
+                producto.categoria,
+                producto.especificacion
+            ].join(" ");
+
+            const coincideTexto =
+                normalizar(textoDelProducto).includes(textoBuscado);
+
+            return coincideCategoria && coincideTexto;
+        });
+
+        mostrarProductos(resultado);
+    }
+
+    function limpiarBusqueda() {
+        campoBuscar.value = "";
+        selectCategoria.value = "todas";
+        aplicarFiltros();
+        campoBuscar.focus();
+    }
+
+    async function cargarCatalogo() {
+        try {
+            const respuesta = await fetch("data/catalogo.json");
+
+            if (!respuesta.ok) {
+                throw new Error("No se pudo leer data/catalogo.json");
+            }
+
+            catalogo = await respuesta.json();
+            cargarCategorias();
+            aplicarFiltros();
+        } catch (error) {
+            mostrarMensajeTabla("No se pudo cargar el catálogo.");
+
+            if (contadorCatalogo) {
+                contadorCatalogo.textContent = "ERROR DE CARGA";
+            }
+
+            console.error(error);
+        }
+    }
+
     campoBuscar.addEventListener("input", aplicarFiltros);
     selectCategoria.addEventListener("change", aplicarFiltros);
     botonLimpiar.addEventListener("click", limpiarBusqueda);
 
     cargarCatalogo();
-}
+});

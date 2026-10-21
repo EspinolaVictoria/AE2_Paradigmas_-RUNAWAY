@@ -1,29 +1,35 @@
-// Calculador de presupuesto del checkout. Los precios y promociones vienen del JSON.
-const formularioTarifas = document.querySelector(".formulario-compra");
-
-if (formularioTarifas) {
+document.addEventListener("DOMContentLoaded", function () {
     const cantidad = document.getElementById("cantidadProducto");
-    const campoCupon = document.getElementById("codigoCupon");
-    const botonCupon = document.getElementById("botonCupon");
-    const mensajeCupon = document.getElementById("mensajeCupon");
     const subtotalElemento = document.getElementById("subtotalProducto");
     const totalElemento = document.getElementById("totalProducto");
     const listaProductos = document.getElementById("productos");
+    const campoCupon = document.getElementById("codigoCupon");
+    const botonCupon = document.getElementById("botonCupon");
+    const mensajeCupon = document.getElementById("mensajeCupon");
+
+    if (!cantidad || !subtotalElemento || !totalElemento) {
+        return;
+    }
 
     let tablaTarifas = null;
     let descuentoActivo = 0;
 
-    const formatearPrecio = (importe) =>
-        "$" + importe.toLocaleString("es-AR");
+    function formatearPrecio(valor) {
+        return "$" + valor.toLocaleString("es-AR");
+    }
 
     function actualizarPresupuesto() {
-        if (!tablaTarifas || !cantidad || !subtotalElemento || !totalElemento) {
+        if (!tablaTarifas) {
             return;
         }
 
-        const producto = tablaTarifas.productos["nocturne-hoodie"];
-        const unidades = Math.max(1, Number.parseInt(cantidad.value, 10) || 1);
-        cantidad.value = unidades;
+        const producto = tablaTarifas.producto;
+        let unidades = Number(cantidad.value);
+
+        if (!Number.isInteger(unidades) || unidades < 1) {
+            unidades = 1;
+            cantidad.value = 1;
+        }
 
         const subtotal = producto.precioUnitario * unidades;
         const total = Math.round(subtotal * (1 - descuentoActivo / 100));
@@ -34,7 +40,8 @@ if (formularioTarifas) {
 
         if (listaProductos) {
             listaProductos.value =
-                unidades + " x " + producto.nombre + " / Talle " + producto.talle +
+                unidades + " x " + producto.nombre +
+                " / Talle " + producto.talle +
                 " / " + subtotalFormateado;
         }
     }
@@ -44,15 +51,14 @@ if (formularioTarifas) {
             const respuesta = await fetch("data/tarifas.json");
 
             if (!respuesta.ok) {
-                throw new Error("No se pudo cargar la tabla de precios.");
+                throw new Error("No se pudo cargar la tabla de tarifas.");
             }
 
             tablaTarifas = await respuesta.json();
             actualizarPresupuesto();
         } catch (error) {
             if (mensajeCupon) {
-                mensajeCupon.textContent =
-                    "No se pudieron cargar los precios. Abrí el proyecto mediante un servidor local.";
+                mensajeCupon.textContent = "No se pudieron cargar los precios.";
                 mensajeCupon.classList.remove("mensaje-exito");
                 mensajeCupon.classList.add("mensaje-error");
             }
@@ -66,33 +72,35 @@ if (formularioTarifas) {
         }
 
         const codigo = campoCupon.value.trim().toUpperCase();
-        const promocion = tablaTarifas.descuentos[codigo];
         mensajeCupon.classList.remove("mensaje-error", "mensaje-exito");
 
-        if (!codigo) {
+        if (codigo === "") {
             descuentoActivo = 0;
-            mensajeCupon.textContent = "Por favor, ingresá un código";
+            mensajeCupon.textContent = "Por favor, ingrese un código";
             mensajeCupon.classList.add("mensaje-error");
-        } else if (promocion) {
-            descuentoActivo = promocion.porcentaje;
-            mensajeCupon.textContent = "¡Cupón aplicado! Tenés " + promocion.descripcion;
-            mensajeCupon.classList.add("mensaje-exito");
         } else {
-            descuentoActivo = 0;
-            mensajeCupon.textContent = "Código inválido o vencido";
-            mensajeCupon.classList.add("mensaje-error");
+            const promocion = tablaTarifas.descuentos[codigo];
+
+            if (promocion) {
+                descuentoActivo = promocion.porcentaje;
+                mensajeCupon.textContent =
+                    "¡Cupón aplicado! Tenés un " + descuentoActivo + "% de descuento";
+                mensajeCupon.classList.add("mensaje-exito");
+            } else {
+                descuentoActivo = 0;
+                mensajeCupon.textContent = "Código inválido o vencido";
+                mensajeCupon.classList.add("mensaje-error");
+            }
         }
 
         actualizarPresupuesto();
     }
 
-    if (cantidad) {
-        cantidad.addEventListener("change", actualizarPresupuesto);
-    }
+    cantidad.addEventListener("change", actualizarPresupuesto);
 
     if (botonCupon) {
         botonCupon.addEventListener("click", aplicarCupon);
     }
 
     cargarTarifas();
-}
+});

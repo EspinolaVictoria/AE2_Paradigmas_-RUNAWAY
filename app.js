@@ -23,6 +23,7 @@ if (valor1 && valor2 && botonCalcular && resultado) {
     });
 }
 
+
 // Monitor de inventario.
 // Los datos se cargan de forma asíncrona desde un archivo JSON local.
 const cuerpoInventario = document.getElementById("cuerpoInventario");
@@ -52,7 +53,7 @@ async function cargarInventario() {
         inventario = await respuesta.json();
         renderizarInventario();
     } catch (error) {
-        cuerpoInventario.innerHTML = "";
+        cuerpoInventario.replaceChildren();
         mostrarEstadoCarga(
             "No fue posible cargar el inventario. Abrí el proyecto mediante un servidor local."
         );
@@ -82,7 +83,7 @@ function renderizarInventario() {
         return true;
     });
 
-    cuerpoInventario.innerHTML = "";
+    cuerpoInventario.replaceChildren();
 
     if (productosFiltrados.length === 0) {
         mostrarEstadoCarga("No hay productos para el filtro seleccionado.");
@@ -220,7 +221,7 @@ function mostrarEstadoCarga(mensaje) {
         return;
     }
 
-    cuerpoInventario.innerHTML = "";
+    cuerpoInventario.replaceChildren();
 
     const fila = document.createElement("tr");
     const celda = document.createElement("td");

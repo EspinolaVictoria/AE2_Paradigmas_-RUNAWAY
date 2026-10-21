@@ -20,6 +20,7 @@
             </li>
             <li><a href="comprar.html">Comprar</a></li>
             <li><a href="inventario.html">Inventario</a></li>
+            <li><a href="cuenta.html">Cuenta</a></li>
         </ul>
     </nav>
 
@@ -52,20 +53,21 @@
                     <p class="kicker">PRODUCT INDEX</p>
                     <h2>Available pieces</h2>
                 </div>
-                <span id="contadorCatalogo">CARGANDO...</span>
+                <span id="contadorCatalogo">CARGANDO / DROP 01</span>
             </div>
-            <div class="buscadorCatalogo">
-                <div class="field-group buscadorTexto">
-                    <label for="buscarProducto">Buscar pieza</label>
-                    <input type="search" id="buscarProducto" placeholder="Nombre, referencia o material" autocomplete="off">
+
+            <div class="catalog-controls" aria-label="Controles del catálogo">
+                <div class="field-group catalog-search-field">
+                    <label for="campoBuscar">Buscar pieza</label>
+                    <input type="search" id="campoBuscar" placeholder="Nombre, referencia o descripción">
                 </div>
-                <div class="field-group buscadorCategoria">
-                    <label for="filtroCategoria">Categoría</label>
-                    <select id="filtroCategoria">
+                <div class="field-group catalog-category-field">
+                    <label for="selectCategoria">Categoría</label>
+                    <select id="selectCategoria">
                         <option value="todas">Todas</option>
                     </select>
                 </div>
-                <button type="button" id="limpiarBusqueda" class="btn-secundario">Limpiar</button>
+                <button type="button" id="botonLimpiar" class="btn-secundario">Limpiar</button>
             </div>
             <div class="tabla-responsive">
                 <table class="tabla-productos">
@@ -80,9 +82,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody id="cuerpoCatalogo">
-                        <tr><td colspan="7" class="mensajeCatalogo">Cargando catálogo...</td></tr>
-                    </tbody>
+                    <tbody id="cuerpoCatalogo"><tr><td colspan="7" class="catalogo-sin-resultados">Cargando catálogo...</td></tr></tbody>
                 </table>
             </div>
         </section>

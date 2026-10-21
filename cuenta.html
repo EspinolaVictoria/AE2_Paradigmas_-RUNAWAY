@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUNAWAY - Cuenta</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <nav class="barra-superior">
+        <a class="marca" href="index.html">RUNAWAY</a>
+        <ul class="menu-principal">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="listado_box.html">Colección</a></li>
+            <li><a href="comprar.html">Comprar</a></li>
+            <li><a href="inventario.html">Inventario</a></li>
+            <li><a href="cuenta.html" aria-current="page">Cuenta</a></li>
+        </ul>
+    </nav>
+
+    <main class="auth-page">
+        <section class="auth-intro">
+            <p class="kicker">ACCOUNT / RUNAWAY</p>
+            <h1>Tu cuenta.</h1>
+            <p>Registrate o iniciá sesión para acceder a tu perfil dentro de RUNAWAY.</p>
+        </section>
+
+        <section class="auth-shell">
+            <header class="auth-header">
+                <div>
+                    <span class="auth-code">RUNAWAY / MEMBER ACCESS</span>
+                    <h2>Acceso</h2>
+                </div>
+                <nav id="nav-publico" class="nav-tabs" aria-label="Opciones de cuenta">
+                    <button id="tab-login" class="btn-tab active" type="button">Iniciar sesión</button>
+                    <button id="tab-registro" class="btn-tab" type="button">Registrarse</button>
+                </nav>
+            </header>
+
+            <section id="vista-login" class="card-view">
+                <p class="kicker">LOGIN</p>
+                <h2>Ingresar a RUNAWAY</h2>
+                <div id="msg-login" class="mensaje-box" aria-live="polite"></div>
+                <form id="form-login" autocomplete="on">
+                    <div class="form-group">
+                        <label for="login-email">Correo electrónico</label>
+                        <input type="email" id="login-email" name="email" placeholder="nombre@email.com" autocomplete="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-pass">Contraseña</label>
+                        <input type="password" id="login-pass" name="password" placeholder="••••••••" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="auth-primary">Ingresar</button>
+                </form>
+            </section>
+
+            <section id="vista-registro" class="card-view oculto">
+                <p class="kicker">NEW MEMBER</p>
+                <h2>Crear cuenta</h2>
+                <div id="msg-registro" class="mensaje-box" aria-live="polite"></div>
+                <form id="form-registro" autocomplete="on">
+                    <div class="form-group">
+                        <label for="reg-nombre">Nombre completo</label>
+                        <input type="text" id="reg-nombre" name="nombre" placeholder="Nombre y apellido" maxlength="100" autocomplete="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Correo electrónico</label>
+                        <input type="email" id="reg-email" name="email" placeholder="nombre@email.com" maxlength="150" autocomplete="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-pass">Contraseña</label>
+                        <input type="password" id="reg-pass" name="password" placeholder="Mínimo 6 caracteres" minlength="6" autocomplete="new-password" required>
+                    </div>
+                    <button type="submit" class="auth-primary">Crear cuenta</button>
+                </form>
+            </section>
+
+            <section id="vista-panel" class="card-view oculto">
+                <div class="panel-header">
+                    <div>
+                        <p class="kicker">MEMBER PROFILE</p>
+                        <h2>Mi perfil</h2>
+                    </div>
+                    <button id="btn-logout" class="auth-secondary" type="button">Cerrar sesión</button>
+                </div>
+                <div class="user-card">
+                    <h3>Bienvenido/a, <span id="user-nombre" class="highlight"></span></h3>
+                    <p><strong>Correo:</strong> <span id="user-email"></span></p>
+                    <p><strong>Rol:</strong> <span id="user-rol" class="badge"></span></p>
+                    <p><strong>Estado:</strong> <span class="status-online">● Sesión activa</span></p>
+                </div>
+                <div class="admin-actions">
+                    <p>Desde esta sesión también podés registrar una nueva cuenta.</p>
+                    <button id="btn-abrir-registro-panel" class="auth-secondary" type="button">Registrar nuevo usuario</button>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer class="pie"><span>RUNAWAY © 2026</span><span>Member access</span></footer>
+    <script src="auth.js" defer></script>
+</body>
+</html>
