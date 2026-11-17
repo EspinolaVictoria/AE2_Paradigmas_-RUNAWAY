@@ -1,0 +1,75 @@
+import { el, formatearPrecio } from "../dom.js";
+import { obtenerTarifas } from "../api.js";
+import { anunciar } from "../anuncios.js";
+
+export async function vistaComprar(parametros) {
+    let tarifas;
+    try {
+        tarifas = await obtenerTarifas(parametros.get("producto_id"));
+    } catch (error) {
+        anunciar(error.message);
+        return el("div", { class: "estado-carga-spa" },
+            el("p", { text: error.message }),
+            el("p", {}, el("a", { class: "link-line", href: "#/catalogo" }, "← Volver a la colección"))
+        );
+    }
+
+    const producto = tarifas.producto;
+    const raiz = document.getElementById("tpl-comprar").content.cloneNode(true);
+    const cantidad = raiz.getElementById("cantidadProducto");
+    const selectTalle = raiz.getElementById("talleCompra");
+    const mensaje = raiz.getElementById("mensajeCompra");
+    const botonEnviar = raiz.querySelector("button[type='submit']");
+
+    const estado = { descuento: 0, cupon: null };
+
+    function mostrarMensaje(texto, tipo) {
+        mensaje.textContent = texto;
+        mensaje.classList.remove("mensaje-error", "mensaje-exito");
+        if (tipo) {
+            mensaje.classList.add(tipo);
+        }
+    }
+
+    function unidades() {
+        const n = Number(cantidad.value);
+        return Number.isInteger(n) && n >= 1 ? n : 1;
+    }
+
+    function actualizarResumen() {
+        const subtotal = producto.precioUnitario * unidades();
+        const total = Math.round(subtotal * (1 - estado.descuento / 100));
+        raiz.getElementById("talleProducto").textContent = selectTalle.value;
+        raiz.getElementById("subtotalProducto").textContent = formatearPrecio(subtotal);
+        raiz.getElementById("descuentoProducto").textContent =
+            estado.descuento > 0 ? "−" + estado.descuento + "%" : "—";
+        raiz.getElementById("totalProducto").textContent = formatearPrecio(total);
+    }
+
+    // Datos fijos del producto elegido.
+    const imagen = raiz.getElementById("imagenProducto");
+    imagen.src = producto.imagen;
+    imagen.alt = producto.nombre;
+    raiz.getElementById("referenciaProducto").textContent =
+        producto.ref + " / " + producto.categoria.toUpperCase();
+    raiz.getElementById("nombreProducto").textContent = producto.nombre;
+    raiz.getElementById("precioUnitario").textContent = formatearPrecio(producto.precioUnitario);
+
+    producto.talles.forEach(function (talle) {
+        selectTalle.appendChild(el("option", { value: talle, text: talle }));
+    });
+    const talleInicial = parametros.get("talle");
+    selectTalle.value = producto.talles.includes(talleInicial) ? talleInicial : producto.talle;
+
+    cantidad.max = String(producto.stock);
+    if (Number(producto.stock) < 1) {
+        botonEnviar.disabled = true;
+        mostrarMensaje("Este producto no tiene stock disponible.", "mensaje-error");
+    }
+
+    cantidad.addEventListener("input", actualizarResumen);
+    selectTalle.addEventListener("change", actualizarResumen);
+    actualizarResumen();
+
+    return raiz;
+}

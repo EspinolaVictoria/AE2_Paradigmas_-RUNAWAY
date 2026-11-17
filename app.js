@@ -4,6 +4,7 @@ import { registrar, iniciarRouter } from "./js/router.js";
 import { anunciar } from "./js/anuncios.js";
 import { vistaCatalogo } from "./js/vistas/catalogo.js";
 import { vistaDetalle } from "./js/vistas/detalle.js";
+import { vistaComprar } from "./js/vistas/comprar.js";
 
 const contenedor = document.getElementById("contenido-principal");
 const enlacesMenu = document.querySelectorAll("[data-ruta]");
@@ -15,6 +16,7 @@ function vistaInicio() {
 
 registrar(/^\/$/, "inicio", "Inicio", vistaInicio);
 registrar(/^\/catalogo$/, "catalogo", "Colección", vistaCatalogo);
+registrar(/^\/comprar$/, "comprar", "Comprar", vistaComprar);
 registrar(/^\/producto\/(\d+)$/, "catalogo", "Detalle de producto", vistaDetalle);
 
 function vistaNoEncontrada() {
