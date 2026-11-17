@@ -1,52 +1,196 @@
-# RUNAWAY — AE4 en desarrollo
+# RUNAWAY — AE4 Paradigmas y Lenguajes de Programación III
 
-RUNAWAY es un e-commerce académico de indumentaria desarrollado para Paradigmas y Lenguajes de Programación III. Esta versión reúne la interfaz del proyecto y los módulos dinámicos realizados por el equipo.
+RUNAWAY es un e-commerce académico de indumentaria desarrollado para la materia Paradigmas y Lenguajes de Programación III.
 
-## Funcionalidades incluidas
+El proyecto evoluciona la versión realizada en el AE2 hacia una aplicación dinámica con arquitectura cliente-servidor, API REST, persistencia en MySQL, autenticación de usuarios, control de acceso y consumo asíncrono mediante JavaScript.
 
-- Portada, colección, ficha de producto y checkout responsive.
-- Monitor de inventario y alertas de stock (`inventario.html`, `app.js`, `data/inventario.json`).
-- Buscador y filtro dinámico de catálogo (`buscador.js`, `data/catalogo.json`).
-- API REST JSON para consultar, crear, actualizar y desactivar productos (`api/productos.php`).
-- Calculador de tarifas y cupón UCP10 conectado a MySQL (`tarifas.js`, `api/tarifas.php`).
-- Registro de compras persistentes desde el checkout (`api/compras.php`), con cálculo del total y control de stock en el servidor.
-- Registro, inicio de sesión, perfil y cierre de sesión mediante PHP, PDO, sesiones y MySQL (`cuenta.html`, `auth.js`, `api/`, `config/`, `db/`).
+## Funcionalidades
 
-La documentación de métodos, parámetros, ejemplos JSON y códigos HTTP se encuentra en [`docs/API_REST.md`](docs/API_REST.md).
+- Página principal responsive.
+- Catálogo dinámico de productos.
+- Búsqueda y filtrado de productos.
+- Vista de detalle de cada producto.
+- Proceso de compra.
+- Cálculo de tarifas y aplicación del cupón `UCP10`.
+- Registro de compras en MySQL.
+- Registro de usuarios.
+- Inicio y cierre de sesión.
+- Perfil de usuario.
+- Contraseñas almacenadas mediante BCRYPT.
+- Monitor de inventario conectado a la base de datos.
+- Alertas automáticas de stock crítico.
+- Modificación persistente de stock para usuarios administradores.
+- Control de acceso mediante sesiones y roles.
 
-## Ejecución completa
+## Arquitectura
 
-Esta versión utiliza PHP y MySQL, por lo que para probar todas las funciones no debe abrirse con doble clic ni únicamente con Live Server.
+El sistema utiliza una arquitectura separada entre frontend y backend.
 
-1. Iniciar MySQL en XAMPP.
-2. Importar `db/backend.sql` desde phpMyAdmin.
-3. Revisar `config/conexion.php`. Por defecto está configurado para usuario `root` sin contraseña, que es la configuración habitual de XAMPP.
-4. Abrir una terminal en la raíz del proyecto y ejecutar:
+### Frontend
+
+Desarrollado con:
+
+- HTML5.
+- CSS3.
+- JavaScript Vanilla.
+- Fetch API.
+- Async/Await.
+- Navegación tipo SPA para Inicio, Catálogo, Detalle y Compra.
+
+El frontend consume los datos del servidor de manera asíncrona y actualiza la interfaz sin utilizar `innerHTML` para datos dinámicos.
+
+### Backend
+
+Desarrollado con:
+
+- PHP 8.
+- PDO.
+- MySQL.
+- API REST con respuestas JSON.
+- Prepared Statements.
+- Sesiones PHP.
+- Arquitectura organizada mediante modelos y endpoints de API.
+
+Los modelos concentran el acceso a los datos, mientras que los archivos de la carpeta `api` reciben las solicitudes HTTP y devuelven las respuestas JSON correspondientes.
+
+## Base de datos
+
+La estructura inicial se encuentra en:
+
+`db/backend.sql`
+
+La base contiene información de:
+
+- usuarios;
+- productos;
+- cupones;
+- compras;
+- detalle de compras.
+
+Los productos incluyen stock y umbral crítico para el funcionamiento del monitor de inventario.
+
+## Seguridad
+
+El proyecto implementa medidas relacionadas con OWASP Top 10:
+
+- PDO con Prepared Statements para reducir el riesgo de SQL Injection.
+- `password_hash()` con `PASSWORD_BCRYPT` para almacenar contraseñas.
+- `password_verify()` para autenticación.
+- sesiones PHP para identificar usuarios autenticados.
+- regeneración del ID de sesión después del inicio de sesión.
+- cookies de sesión con `HttpOnly` y `SameSite=Lax`.
+- control de acceso por rol.
+- respuesta `401 Unauthorized` cuando se intenta acceder a funciones privadas sin sesión.
+- respuesta `403 Forbidden` cuando un usuario autenticado no posee los permisos necesarios.
+- mensajes genéricos ante errores internos del servidor.
+- uso de `textContent`, `createElement()` y `replaceChildren()` para evitar insertar directamente HTML recibido desde la API.
+
+## API REST
+
+Los principales endpoints se encuentran dentro de la carpeta `api`.
+
+Entre ellos:
+
+- `api/productos.php`
+- `api/tarifas.php`
+- `api/compras.php`
+- `api/registro.php`
+- `api/login.php`
+- `api/perfil.php`
+- `api/logout.php`
+
+La documentación adicional de la API se encuentra en:
+
+`docs/API_REST.md`
+
+## Ejecución
+
+El proyecto necesita PHP y MySQL.
+
+### 1. Iniciar MySQL
+
+Abrir XAMPP e iniciar:
+
+`MySQL`
+
+### 2. Crear la base de datos
+
+Ingresar a phpMyAdmin e importar:
+
+`db/backend.sql`
+
+El script crea la base de datos `backend` y sus tablas.
+
+### 3. Configurar la conexión
+
+Revisar:
+
+`config/conexion.php`
+
+La configuración por defecto está preparada para una instalación habitual de XAMPP utilizando:
+
+- host: `localhost`
+- base de datos: `backend`
+- usuario: `root`
+- contraseña vacía
+
+### 4. Iniciar el servidor PHP
+
+Abrir PowerShell en la carpeta raíz del proyecto y ejecutar:
 
 ```powershell
 C:\xampp\php\php.exe -S localhost:8000
 ```
 
-5. Abrir en el navegador:
+### 5. Abrir la aplicación
+
+Página principal:
 
 `http://localhost:8000/index.html`
 
-La cuenta se encuentra en `http://localhost:8000/cuenta.html`.
+Cuenta:
 
-## Cupón
+`http://localhost:8000/cuenta.html`
 
-Código válido: `UCP10` (10% de descuento).
+Inventario:
 
+`http://localhost:8000/inventario.html`
 
-## Seguridad y arquitectura
+## Cuenta administrativa
 
-La versión actual aplica:
-- sesiones PHP para endpoints privados;
-- respuesta `401 Unauthorized` cuando no existe una sesión activa;
-- regeneración del ID de sesión luego de autenticar;
-- destrucción de sesión y expiración de la cookie al cerrar sesión;
-- `password_hash(..., PASSWORD_BCRYPT)` y `password_verify()`;
-- PDO con Prepared Statements y parámetros nombrados;
-- renderizado seguro del frontend mediante `textContent`, `createElement()` y `replaceChildren()`;
-- endpoints PHP con respuestas JSON y códigos HTTP semánticos;
-- consumo asíncrono mediante `fetch()` y `async/await`.
+Los usuarios registrados se crean inicialmente con rol de cliente.
+
+El rol administrador permite realizar las operaciones protegidas de gestión de inventario.
+
+Para las pruebas académicas puede asignarse el rol `admin` a un usuario desde la base de datos.
+
+Después de modificar el rol se debe volver a iniciar sesión para actualizar los datos almacenados en la sesión.
+
+## Accesibilidad
+
+La interfaz utiliza:
+
+- HTML semántico.
+- navegación mediante teclado.
+- estados de foco visibles.
+- textos alternativos en imágenes.
+- etiquetas asociadas a formularios.
+- encabezados de tablas con `scope`.
+- regiones `aria-live` para mensajes dinámicos.
+- enlace para saltar directamente al contenido principal.
+
+## Cupón de prueba
+
+Código:
+
+`UCP10`
+
+Descuento:
+
+`10 %`
+
+## Integrantes
+
+Proyecto desarrollado para Paradigmas y Lenguajes de Programación III.
+
+Universidad de la Cuenca del Plata — 2026.
