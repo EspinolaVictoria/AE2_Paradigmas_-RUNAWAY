@@ -9,12 +9,17 @@
 <body>
     <nav class="barra-superior">
         <a class="marca" href="index.html">RUNAWAY</a>
+
         <ul class="menu-principal">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="index.html#/catalogo">Colección</a></li>
             <li><a href="index.html#/comprar">Comprar</a></li>
             <li><a href="cuenta.html">Cuenta</a></li>
-            <li><a href="inventario.html" aria-current="page">Inventario</a></li>
+            <li>
+                <a href="inventario.html" aria-current="page">
+                    Inventario
+                </a>
+            </li>
         </ul>
     </nav>
 
@@ -23,23 +28,31 @@
             <div>
                 <p class="kicker">OPERATIONS / INVENTORY</p>
                 <h1>Monitor de inventario</h1>
+
                 <p>
-                    Seguimiento del stock disponible de la colección y detección visual
-                    de productos que se encuentran por debajo del umbral crítico.
+                    Seguimiento del stock disponible de la colección y
+                    detección visual de productos que se encuentran por
+                    debajo del umbral crítico.
                 </p>
             </div>
+
             <span class="inventario-codigo">STOCK / 01</span>
         </header>
 
-        <section class="inventario-indicadores" aria-label="Indicadores generales del inventario">
+        <section
+            class="inventario-indicadores"
+            aria-label="Indicadores generales del inventario"
+        >
             <article class="indicador-stock">
                 <span>Unidades totales</span>
                 <strong id="totalUnidades">0</strong>
             </article>
+
             <article class="indicador-stock">
                 <span>Productos críticos</span>
                 <strong id="totalCriticos">0</strong>
             </article>
+
             <article class="indicador-stock">
                 <span>Productos disponibles</span>
                 <strong id="totalDisponibles">0</strong>
@@ -49,28 +62,43 @@
         <section class="inventario-panel">
             <div class="inventario-toolbar">
                 <div class="field-group inventario-filtro">
-                    <label for="filtroInventario">Mostrar productos</label>
+                    <label for="filtroInventario">
+                        Mostrar productos
+                    </label>
+
                     <select id="filtroInventario">
                         <option value="todos">Todos</option>
                         <option value="criticos">Stock crítico</option>
-                        <option value="disponibles">Disponibles</option>
+                        <option value="disponibles">
+                            Disponibles
+                        </option>
                     </select>
                 </div>
 
-                <button type="button" id="recargarInventario" class="btn-secundario">
+                <button
+                    type="button"
+                    id="recargarInventario"
+                    class="btn-secundario"
+                >
                     Recargar datos
                 </button>
             </div>
 
-            <p id="alertaInventario" class="alerta-inventario" aria-live="polite">
+            <p
+                id="alertaInventario"
+                class="alerta-inventario"
+                aria-live="polite"
+            >
                 Consultando estado del inventario...
             </p>
 
             <div class="tabla-responsive">
                 <table class="tabla-productos tabla-inventario">
                     <caption class="visually-hidden">
-                        Estado de stock y umbral crítico de los productos RUNAWAY
+                        Estado de stock y umbral crítico de los productos
+                        RUNAWAY
                     </caption>
+
                     <thead>
                         <tr>
                             <th scope="col">Ref.</th>
@@ -81,9 +109,13 @@
                             <th scope="col">Ajuste</th>
                         </tr>
                     </thead>
+
                     <tbody id="cuerpoInventario">
                         <tr>
-                            <td colspan="6" class="estado-carga-inventario">
+                            <td
+                                colspan="6"
+                                class="estado-carga-inventario"
+                            >
                                 Cargando inventario...
                             </td>
                         </tr>
@@ -92,8 +124,10 @@
             </div>
 
             <p class="nota-inventario">
-                Los botones de ajuste modifican el stock en memoria durante la sesión.
-                Al recargar los datos se restaura la información almacenada en el archivo JSON.
+                Los datos se obtienen desde la base de datos mediante la
+                API del sistema. Los ajustes de stock están disponibles
+                únicamente para usuarios administradores y se guardan de
+                forma persistente.
             </p>
         </section>
     </main>
