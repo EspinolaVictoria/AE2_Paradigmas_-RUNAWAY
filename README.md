@@ -1,4 +1,4 @@
-# RUNAWAY — AE2 integrada + autenticación
+# RUNAWAY — AE4 en desarrollo
 
 RUNAWAY es un e-commerce académico de indumentaria desarrollado para Paradigmas y Lenguajes de Programación III. Esta versión reúne la interfaz del proyecto y los módulos dinámicos realizados por el equipo.
 
@@ -7,8 +7,12 @@ RUNAWAY es un e-commerce académico de indumentaria desarrollado para Paradigmas
 - Portada, colección, ficha de producto y checkout responsive.
 - Monitor de inventario y alertas de stock (`inventario.html`, `app.js`, `data/inventario.json`).
 - Buscador y filtro dinámico de catálogo (`buscador.js`, `data/catalogo.json`).
-- Calculador de tarifas y cupón UCP10 (`tarifas.js`, `data/tarifas.json`).
+- API REST JSON para consultar, crear, actualizar y desactivar productos (`api/productos.php`).
+- Calculador de tarifas y cupón UCP10 conectado a MySQL (`tarifas.js`, `api/tarifas.php`).
+- Registro de compras persistentes desde el checkout (`api/compras.php`), con cálculo del total y control de stock en el servidor.
 - Registro, inicio de sesión, perfil y cierre de sesión mediante PHP, PDO, sesiones y MySQL (`cuenta.html`, `auth.js`, `api/`, `config/`, `db/`).
+
+La documentación de métodos, parámetros, ejemplos JSON y códigos HTTP se encuentra en [`docs/API_REST.md`](docs/API_REST.md).
 
 ## Ejecución completa
 
