@@ -160,6 +160,19 @@
                 <span id="contadorCatalogo">CARGANDO / DROP 01</span>
             </div>
 
+            <form class="catalog-controls" role="search" aria-label="Buscar en el catálogo">
+                <div class="field-group catalog-search-field">
+                    <label for="campoBuscar">Buscar pieza</label>
+                    <input type="search" id="campoBuscar" placeholder="Nombre, referencia o descripción" autocomplete="off">
+                </div>
+                <div class="field-group catalog-category-field">
+                    <label for="selectCategoria">Categoría</label>
+                    <select id="selectCategoria">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+                <button type="button" id="botonLimpiar" class="btn-secundario">Limpiar</button>
+            </form>
             <div class="tabla-responsive">
                 <table class="tabla-productos">
                     <thead>
