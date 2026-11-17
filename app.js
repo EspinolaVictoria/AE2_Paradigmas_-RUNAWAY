@@ -2,17 +2,13 @@
 import { vaciar } from "./js/dom.js";
 import { registrar, iniciarRouter } from "./js/router.js";
 import { anunciar } from "./js/anuncios.js";
+import { vistaInicio } from "./js/vistas/inicio.js";
 import { vistaCatalogo } from "./js/vistas/catalogo.js";
 import { vistaDetalle } from "./js/vistas/detalle.js";
 import { vistaComprar } from "./js/vistas/comprar.js";
 
 const contenedor = document.getElementById("contenido-principal");
 const enlacesMenu = document.querySelectorAll("[data-ruta]");
-
-function vistaInicio() {
-    const plantilla = document.getElementById("tpl-inicio");
-    return plantilla.content.cloneNode(true);
-}
 
 registrar(/^\/$/, "inicio", "Inicio", vistaInicio);
 registrar(/^\/catalogo$/, "catalogo", "Colección", vistaCatalogo);
