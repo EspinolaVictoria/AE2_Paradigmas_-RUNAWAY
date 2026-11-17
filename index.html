@@ -7,29 +7,39 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="barra-superior">
-        <a class="marca" href="index.html">RUNAWAY</a>
+    <a class="salto-contenido" href="#contenido-principal">Saltar al contenido</a>
+
+    <nav class="barra-superior" aria-label="Navegación principal">
+        <a class="marca" href="#/">RUNAWAY</a>
         <ul class="menu-principal">
-            <li><a href="index.html">Inicio</a></li>
-            <li class="dropdown">
-                <a href="listado_box.html">Colección</a>
-                <ul class="menu-desplegable">
-                    <li><a href="listado_box.html">Todos los productos</a></li>
-                    <li><a href="producto.html">Pieza destacada</a></li>
-                </ul>
-            </li>
-            <li><a href="comprar.html">Comprar</a></li>
+            <li><a href="#/" data-ruta="inicio">Inicio</a></li>
+            <li><a href="#/catalogo" data-ruta="catalogo">Colección</a></li>
+            <li><a href="#/comprar" data-ruta="comprar">Comprar</a></li>
             <li><a href="inventario.html">Inventario</a></li>
             <li><a href="cuenta.html">Cuenta</a></li>
         </ul>
     </nav>
 
+    <main id="contenido-principal" tabindex="-1">
+        <p class="estado-carga-spa">Cargando…</p>
+    </main>
+
+    <footer class="pie">
+        <span>RUNAWAY © 2026</span>
+        <span>Posadas · Argentina</span>
+    </footer>
+
+    <!-- Región viva: los lectores de pantalla anuncian aquí los cambios de vista y de estado. -->
+    <div id="anuncios" class="solo-lectores" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Plantillas estáticas: la SPA las clona, no inserta HTML en tiempo de ejecución. -->
+    <template id="tpl-inicio">
     <header class="hero">
         <div class="hero-copy">
             <p class="kicker">NOCTURNE / CHAPTER 01</p>
             <h1>RUNAWAY</h1>
             <p class="hero-line">Luxury streetwear built outside the expected.</p>
-            <a class="btn-principal" href="listado_box.html">Explorar colección →</a>
+            <a class="btn-principal" href="#/catalogo">Explorar colección →</a>
         </div>
         <div class="hero-art">
             <img src="assets/liquid-chrome.svg" alt="Escultura de cromo líquido rosa y violeta" class="chrome-liquid">
@@ -43,7 +53,7 @@
         <h2>Sharp silhouettes.<br><em>Liquid surfaces.</em><br>Dark character.</h2>
         <div class="intro-bottom">
             <p>RUNAWAY combina proporciones amplias, materiales pesados y una dirección visual inspirada en metal, reflejos nocturnos y fotografía editorial.</p>
-            <a href="producto.html" class="link-line">Descubrir pieza 001 →</a>
+            <a href="#/catalogo" class="link-line">Descubrir pieza 001 →</a>
         </div>
     </section>
 
@@ -84,7 +94,7 @@
                     <span>01 / HOODIE</span>
                     <h3>Nocturne Hoodie</h3>
                     <p>$245.000</p>
-                    <a href="producto.html">Ver detalle →</a>
+                    <a href="#/catalogo">Ver detalle →</a>
                 </div>
             </article>
             <article class="featured-card">
@@ -93,7 +103,7 @@
                     <span>02 / TEE</span>
                     <h3>Obsidian Tee</h3>
                     <p>$135.000</p>
-                    <a href="producto.html">Ver detalle →</a>
+                    <a href="#/catalogo">Ver detalle →</a>
                 </div>
             </article>
             <article class="featured-card">
@@ -102,7 +112,7 @@
                     <span>03 / CARGO</span>
                     <h3>Armor Cargo</h3>
                     <p>$289.000</p>
-                    <a href="producto.html">Ver detalle →</a>
+                    <a href="#/catalogo">Ver detalle →</a>
                 </div>
             </article>
         </div>
@@ -115,10 +125,8 @@
             <h2>FROM THE EXPECTED</h2>
         </div>
     </section>
+    </template>
 
-    <footer class="pie">
-        <span>RUNAWAY © 2026</span>
-        <span>Posadas · Argentina</span>
-    </footer>
+    <script type="module" src="app.js"></script>
 </body>
 </html>

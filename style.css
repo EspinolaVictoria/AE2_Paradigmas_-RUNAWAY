@@ -840,3 +840,22 @@ img { display: block; max-width: 100%; }
 @media (max-width: 720px) {
     .catalog-controls { grid-template-columns: 1fr; }
 }
+
+/* ===== SPA: utilidades base ===== */
+.solo-lectores {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.estado-carga-spa {
+    padding: 120px 24px;
+    text-align: center;
+    color: #9a9a9a;
+}
