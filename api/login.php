@@ -1,62 +1,76 @@
 <?php
-header('Content-Type: application/json; charset=utf-8');
-require_once '../config/conexion.php';
 
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_samesite', 'Lax');
-// ini_set('session.cookie_secure', 1); // Activar en producción con HTTPS
+declare(strict_types=1);
+
+require_once __DIR__ . '/../config/conexion.php';
+require_once __DIR__ . '/../models/UsuarioModel.php';
+require_once __DIR__ . '/respuesta.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(["estado" => "error", "mensaje" => "Método no permitido."]);
-    exit;
+    responder_json(405, [
+        'estado' => 'error',
+        'mensaje' => 'Método no permitido.',
+    ]);
 }
 
-$input    = json_decode(file_get_contents('php://input'), true);
-$email    = trim($input['email'] ?? '');
-$password = $input['password'] ?? '';
+$datos = leer_json();
 
-if (empty($email) || empty($password)) {
-    http_response_code(400);
-    echo json_encode(["estado" => "error", "mensaje" => "Ingrese correo y contraseña."]);
-    exit;
+$email = trim((string) ($datos['email'] ?? ''));
+$password = (string) ($datos['password'] ?? '');
+
+if ($email === '' || $password === '') {
+    responder_json(400, [
+        'estado' => 'error',
+        'mensaje' => 'Ingrese correo y contraseña.',
+    ]);
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    http_response_code(400);
-    echo json_encode(["estado" => "error", "mensaje" => "Correo con formato inválido."]);
-    exit;
+    responder_json(400, [
+        'estado' => 'error',
+        'mensaje' => 'Correo con formato inválido.',
+    ]);
 }
 
 try {
-    $stmt = $pdo->prepare('SELECT id, nombre, email, password, rol FROM usuarios WHERE email = :email');
-    $stmt->execute(['email' => $email]);
-    $usuario = $stmt->fetch();
+    $modelo = new UsuarioModel(Conexion::obtener());
+    $usuario = $modelo->buscarPorEmail($email);
 
-    if ($usuario && password_verify($password, $usuario['password'])) {
-        session_start();
-        session_regenerate_id(true);
-
-        $_SESSION['usuario_id']     = $usuario['id'];
-        $_SESSION['usuario_nombre'] = $usuario['nombre'];
-        $_SESSION['usuario_email']  = $usuario['email'];
-        $_SESSION['usuario_rol']    = $usuario['rol'];
-
-        http_response_code(200);
-        echo json_encode([
-            "estado"  => "exito",
-            "mensaje" => "Autenticación exitosa.",
-            "usuario" => [
-                "nombre" => $usuario['nombre'],
-                "email"  => $usuario['email'],
-                "rol"    => $usuario['rol']
-            ]
+    if (
+        $usuario === null ||
+        !password_verify($password, $usuario['password'])
+    ) {
+        responder_json(401, [
+            'estado' => 'error',
+            'mensaje' => 'Credenciales incorrectas.',
         ]);
-    } else {
-        http_response_code(401);
-        echo json_encode(["estado" => "error", "mensaje" => "Credenciales incorrectas."]);
     }
-} catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(["estado" => "error", "mensaje" => "Error interno del servidor."]);
+
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_samesite', 'Lax');
+
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+
+    session_regenerate_id(true);
+
+    $_SESSION['usuario_id'] = (int) $usuario['id'];
+    $_SESSION['usuario_nombre'] = (string) $usuario['nombre'];
+    $_SESSION['usuario_email'] = (string) $usuario['email'];
+    $_SESSION['usuario_rol'] = (string) $usuario['rol'];
+
+    responder_json(200, [
+        'estado' => 'exito',
+        'mensaje' => 'Autenticación exitosa.',
+        'usuario' => [
+            'id' => (int) $usuario['id'],
+            'nombre' => (string) $usuario['nombre'],
+            'email' => (string) $usuario['email'],
+            'rol' => (string) $usuario['rol'],
+        ],
+    ]);
+} catch (Throwable $exception) {
+    responder_error_servidor($exception);
 }

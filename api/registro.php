@@ -1,55 +1,78 @@
 <?php
-header('Content-Type: application/json; charset=utf-8');
-require_once '../config/conexion.php';
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/../config/conexion.php';
+require_once __DIR__ . '/../models/UsuarioModel.php';
+require_once __DIR__ . '/respuesta.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(["estado" => "error", "mensaje" => "Método no permitido."]);
-    exit;
+    responder_json(405, [
+        'estado' => 'error',
+        'mensaje' => 'Método no permitido.',
+    ]);
 }
 
-$input    = json_decode(file_get_contents('php://input'), true);
-$nombre   = trim($input['nombre'] ?? '');
-$email    = trim($input['email'] ?? '');
-$password = $input['password'] ?? '';
+$datos = leer_json();
 
-if (empty($nombre) || empty($email) || empty($password)) {
-    http_response_code(400);
-    echo json_encode(["estado" => "error", "mensaje" => "Todos los campos son obligatorios."]);
-    exit;
+$nombre = trim((string) ($datos['nombre'] ?? ''));
+$email = trim((string) ($datos['email'] ?? ''));
+$password = (string) ($datos['password'] ?? '');
+
+if ($nombre === '' || $email === '' || $password === '') {
+    responder_json(400, [
+        'estado' => 'error',
+        'mensaje' => 'Todos los campos son obligatorios.',
+    ]);
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    http_response_code(400);
-    echo json_encode(["estado" => "error", "mensaje" => "Correo con formato inválido."]);
-    exit;
+    responder_json(400, [
+        'estado' => 'error',
+        'mensaje' => 'Correo con formato inválido.',
+    ]);
 }
 
 if (strlen($password) < 6) {
-    http_response_code(400);
-    echo json_encode(["estado" => "error", "mensaje" => "La contraseña debe tener al menos 6 caracteres."]);
-    exit;
+    responder_json(400, [
+        'estado' => 'error',
+        'mensaje' => 'La contraseña debe tener al menos 6 caracteres.',
+    ]);
 }
 
-$passwordHash = password_hash($password, PASSWORD_BCRYPT);
+$passwordHash = password_hash(
+    $password,
+    PASSWORD_BCRYPT
+);
 
 try {
-    $sql = "INSERT INTO usuarios (nombre, email, password) VALUES (:nombre, :email, :pass)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        'nombre' => $nombre,
-        'email'  => $email,
-        'pass'   => $passwordHash
-    ]);
+    $modelo = new UsuarioModel(Conexion::obtener());
 
-    http_response_code(201);
-    echo json_encode(["estado" => "exito", "mensaje" => "Usuario registrado correctamente."]);
-} catch (PDOException $e) {
-    if ($e->getCode() == 23000) {
-        http_response_code(409);
-        echo json_encode(["estado" => "error", "mensaje" => "El correo electrónico ya existe."]);
-    } else {
-        http_response_code(500);
-        echo json_encode(["estado" => "error", "mensaje" => "Error interno al registrar el usuario."]);
+    $usuarioId = $modelo->crear(
+        $nombre,
+        $email,
+        $passwordHash
+    );
+
+    responder_json(201, [
+        'estado' => 'exito',
+        'mensaje' => 'Usuario registrado correctamente.',
+        'usuario' => [
+            'id' => $usuarioId,
+            'nombre' => $nombre,
+            'email' => $email,
+            'rol' => 'cliente',
+        ],
+    ]);
+} catch (PDOException $exception) {
+    if ((string) $exception->getCode() === '23000') {
+        responder_json(409, [
+            'estado' => 'error',
+            'mensaje' => 'El correo electrónico ya existe.',
+        ]);
     }
+
+    responder_error_servidor($exception);
+} catch (Throwable $exception) {
+    responder_error_servidor($exception);
 }
