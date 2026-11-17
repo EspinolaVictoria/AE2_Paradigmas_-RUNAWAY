@@ -1,5 +1,5 @@
 import { el, formatearPrecio } from "../dom.js";
-import { obtenerTarifas } from "../api.js";
+import { obtenerTarifas, crearCompra } from "../api.js";
 import { anunciar } from "../anuncios.js";
 
 export async function vistaComprar(parametros) {
@@ -27,6 +27,12 @@ export async function vistaComprar(parametros) {
     const textoSubtotal = raiz.getElementById("subtotalProducto");
     const textoDescuento = raiz.getElementById("descuentoProducto");
     const textoTotal = raiz.getElementById("totalProducto");
+    const formulario = raiz.getElementById("formCompra");
+    const campoNombre = raiz.getElementById("nombre");
+    const campoDireccion = raiz.getElementById("direccion");
+    const campoTelefono = raiz.getElementById("telefono");
+    const campoEmail = raiz.getElementById("email");
+    const campoPago = raiz.getElementById("pago");
 
     const estado = { descuento: 0, cupon: null };
 
@@ -90,6 +96,51 @@ export async function vistaComprar(parametros) {
         actualizarResumen();
     }
 
+    // El precio y el cupón se vuelven a validar en el servidor: aquí solo se envían ids y códigos.
+    async function confirmarCompra(evento) {
+        evento.preventDefault();
+
+        if (!formulario.checkValidity()) {
+            formulario.reportValidity();
+            mostrarMensaje("Completá todos los datos obligatorios.", "mensaje-error");
+            return;
+        }
+
+        botonEnviar.disabled = true;
+        mostrarMensaje("Registrando la compra…", null);
+
+        try {
+            const compra = await crearCompra({
+                cliente: {
+                    nombre: campoNombre.value.trim(),
+                    direccion: campoDireccion.value.trim(),
+                    telefono: campoTelefono.value.trim(),
+                    email: campoEmail.value.trim(),
+                    medio_pago: campoPago.value
+                },
+                items: [{ producto_id: producto.id, talle: selectTalle.value, cantidad: unidades() }],
+                codigo_cupon: estado.cupon
+            });
+
+            producto.stock = Math.max(0, Number(producto.stock) - unidades());
+            cantidad.max = String(producto.stock);
+            formulario.reset();
+            cantidad.value = "1";
+            estado.descuento = 0;
+            estado.cupon = null;
+            actualizarResumen();
+            mostrarMensaje(
+                "Compra N.º " + compra.id + " registrada. El sitio guarda el medio de pago, pero no procesa cobros.",
+                "mensaje-exito"
+            );
+        } catch (error) {
+            mostrarMensaje(error.message, "mensaje-error");
+        } finally {
+            botonEnviar.disabled = Number(producto.stock) < 1;
+        }
+    }
+
+    formulario.addEventListener("submit", confirmarCompra);
     botonCupon.addEventListener("click", aplicarCupon);
     cantidad.addEventListener("input", actualizarResumen);
     selectTalle.addEventListener("change", actualizarResumen);
