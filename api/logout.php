@@ -1,45 +1,41 @@
 <?php
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_samesite', 'Lax');
-// ini_set('session.cookie_secure', 1); // Activar en producción con HTTPS
 
-session_start();
-header('Content-Type: application/json; charset=utf-8');
+declare(strict_types=1);
+
+require_once __DIR__ . '/respuesta.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(["estado" => "error", "mensaje" => "Método no permitido."]);
-    exit;
+    responder_json(405, [
+        'estado' => 'error',
+        'mensaje' => 'Método no permitido.',
+    ]);
 }
 
-if (!isset($_SESSION['usuario_id'])) {
-    http_response_code(401);
-    echo json_encode([
-        "estado" => "error",
-        "mensaje" => "No existe una sesión activa."
-    ]);
-    exit;
-}
+exigir_usuario();
 
 $_SESSION = [];
 
-if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
+if (ini_get('session.use_cookies')) {
+    $parametros = session_get_cookie_params();
 
-    setcookie(session_name(), '', [
-        'expires' => time() - 42000,
-        'path' => $params['path'],
-        'domain' => $params['domain'],
-        'secure' => $params['secure'],
-        'httponly' => $params['httponly'],
-        'samesite' => $params['samesite'] ?: 'Lax'
-    ]);
+    setcookie(
+        session_name(),
+        '',
+        [
+            'expires' => time() - 42000,
+            'path' => $parametros['path'] ?: '/',
+            'domain' => $parametros['domain'],
+            'secure' => (bool) $parametros['secure'],
+            'httponly' => (bool) $parametros['httponly'],
+            'samesite' => $parametros['samesite'] ?: 'Lax',
+        ]
+    );
 }
+
 
 session_destroy();
 
-http_response_code(200);
-echo json_encode([
-    "estado" => "exito",
-    "mensaje" => "Sesión cerrada correctamente."
+responder_json(200, [
+    'estado' => 'exito',
+    'mensaje' => 'Sesión cerrada correctamente.',
 ]);

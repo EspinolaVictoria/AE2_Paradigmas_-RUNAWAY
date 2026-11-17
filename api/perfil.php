@@ -1,33 +1,41 @@
 <?php
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_samesite', 'Lax');
-// ini_set('session.cookie_secure', 1); // Activar en producción con HTTPS
 
-session_start();
-header('Content-Type: application/json; charset=utf-8');
+declare(strict_types=1);
+
+require_once __DIR__ . '/respuesta.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-    http_response_code(405);
-    echo json_encode(["estado" => "error", "mensaje" => "Método no permitido."]);
-    exit;
-}
-
-if (!isset($_SESSION['usuario_id'])) {
-    http_response_code(401);
-    echo json_encode([
-        "estado" => "error",
-        "mensaje" => "Acceso no autorizado. Inicie sesión."
+    responder_json(405, [
+        'estado' => 'error',
+        'mensaje' => 'Método no permitido.',
     ]);
-    exit;
 }
 
-http_response_code(200);
-echo json_encode([
-    "estado" => "exito",
-    "data" => [
-        "id" => $_SESSION['usuario_id'],
-        "nombre" => $_SESSION['usuario_nombre'],
-        "email" => $_SESSION['usuario_email'] ?? null,
-        "rol" => $_SESSION['usuario_rol']
-    ]
-], JSON_UNESCAPED_UNICODE);
+$sesion = exigir_usuario();
+
+require_once __DIR__ . '/../config/conexion.php';
+require_once __DIR__ . '/../models/UsuarioModel.php';
+
+try {
+    $modelo = new UsuarioModel(Conexion::obtener());
+    $usuario = $modelo->buscarPorId($sesion['id']);
+
+    if ($usuario === null) {
+        responder_json(401, [
+            'estado' => 'error',
+            'mensaje' => 'La sesión no corresponde a un usuario válido.',
+        ]);
+    }
+
+    responder_json(200, [
+        'estado' => 'exito',
+        'data' => [
+            'id' => (int) $usuario['id'],
+            'nombre' => (string) $usuario['nombre'],
+            'email' => (string) $usuario['email'],
+            'rol' => (string) $usuario['rol'],
+        ],
+    ]);
+} catch (Throwable $exception) {
+    responder_error_servidor($exception);
+}
