@@ -1,8 +1,8 @@
 // Router por hash: #/, #/catalogo, #/producto/3, #/comprar?producto_id=3
 const rutas = [];
 
-export function registrar(patron, nombre, manejador) {
-    rutas.push({ patron, nombre, manejador });
+export function registrar(patron, nombre, titulo, manejador) {
+    rutas.push({ patron, nombre, titulo, manejador });
 }
 
 export function irA(hash) {
