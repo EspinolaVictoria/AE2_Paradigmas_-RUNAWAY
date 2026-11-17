@@ -225,6 +225,72 @@
         </div>
     </template>
 
+    <template id="tpl-comprar">
+        <div class="checkout-page">
+            <section class="checkout-heading">
+                <p class="kicker">CHECKOUT / RUNAWAY</p>
+                <h1>Finalizar compra</h1>
+                <p>Completá tus datos y revisá el pedido antes de confirmar.</p>
+            </section>
+
+            <section class="checkout-layout">
+                <div class="checkout-form-card">
+                    <form class="formulario-compra" id="formCompra" novalidate>
+                        <div class="field-group">
+                            <label for="nombre">Nombre del cliente</label>
+                            <input type="text" id="nombre" name="nombre" placeholder="Nombre y apellido" autocomplete="name" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="direccion">Dirección</label>
+                            <input type="text" id="direccion" name="direccion" placeholder="Dirección de entrega" autocomplete="street-address" required>
+                        </div>
+                        <div class="fields-two">
+                            <div class="field-group"><label for="telefono">Teléfono</label><input type="tel" id="telefono" name="telefono" placeholder="3764 000000" autocomplete="tel" required></div>
+                            <div class="field-group"><label for="email">E-mail</label><input type="email" id="email" name="email" placeholder="nombre@email.com" autocomplete="email" required></div>
+                        </div>
+                        <div class="field-group">
+                            <label for="pago">Medio de pago</label>
+                            <select id="pago" name="pago" required>
+                                <option value="">Seleccionar</option>
+                                <option value="tarjeta_credito">Tarjeta de crédito</option>
+                                <option value="tarjeta_debito">Tarjeta de débito</option>
+                                <option value="transferencia">Transferencia bancaria</option>
+                                <option value="mercado_pago">Mercado Pago</option>
+                            </select>
+                        </div>
+                        <div class="fields-two">
+                            <div class="field-group">
+                                <label for="talleCompra">Talle</label>
+                                <select id="talleCompra" name="talle"></select>
+                            </div>
+                            <div class="field-group">
+                                <label for="cantidadProducto">Cantidad</label>
+                                <input type="number" id="cantidadProducto" name="cantidadProducto" min="1" value="1" inputmode="numeric">
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="codigoCupon">Código de descuento</label>
+                            <input type="text" id="codigoCupon" name="codigoCupon" placeholder="Ingresá tu cupón" autocomplete="off">
+                            <button type="button" id="botonCupon" class="btn-secundario">Aplicar cupón</button>
+                        </div>
+                        <p id="mensajeCompra" class="mensaje-cupon" aria-live="polite"></p>
+                        <button class="btn-principal full" type="submit">Confirmar pedido →</button>
+                    </form>
+                </div>
+
+                <aside class="order-card" aria-label="Resumen del pedido">
+                    <div class="order-image"><img id="imagenProducto" src="" alt=""></div>
+                    <div class="order-title"><span id="referenciaProducto"></span><h2 id="nombreProducto"></h2></div>
+                    <div class="order-row"><span>Talle</span><strong id="talleProducto"></strong></div>
+                    <div class="order-row"><span>Precio unitario</span><strong id="precioUnitario"></strong></div>
+                    <div class="order-row"><span>Subtotal</span><strong id="subtotalProducto"></strong></div>
+                    <div class="order-row"><span>Descuento</span><strong id="descuentoProducto">—</strong></div>
+                    <div class="order-total"><span>Total</span><strong id="totalProducto"></strong></div>
+                </aside>
+            </section>
+        </div>
+    </template>
+
     <script type="module" src="app.js"></script>
 </body>
 </html>
