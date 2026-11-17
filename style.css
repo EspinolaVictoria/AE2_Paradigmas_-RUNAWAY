@@ -861,3 +861,17 @@ img { display: block; max-width: 100%; }
 }
 
 .menu-principal a[aria-current="page"] { color: #fff; }
+
+/* ===== Accesibilidad: foco visible para navegación por teclado ===== */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+    outline: 3px solid #e8a8cf;
+    outline-offset: 3px;
+}
+
+/* El contenedor recibe foco por código al cambiar de vista; no necesita anillo. */
+#contenido-principal:focus { outline: none; }
