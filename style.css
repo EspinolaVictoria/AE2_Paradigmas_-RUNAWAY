@@ -890,3 +890,8 @@ summary:focus-visible {
 }
 
 .salto-contenido:focus { top: 16px; }
+
+/* Selector de talle: estado elegido comunicado también visualmente (aria-pressed). */
+.sizes button[aria-pressed="true"] { background: #e9e5e1; color: #080808; border-color: #e9e5e1; }
+
+.btn-principal[aria-disabled="true"] { opacity: .45; pointer-events: none; }
