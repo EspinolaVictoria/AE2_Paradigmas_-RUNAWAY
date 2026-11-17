@@ -39,6 +39,49 @@ Desarrollado con:
 
 El frontend consume los datos del servidor de manera asíncrona y actualiza la interfaz sin utilizar `innerHTML` para datos dinámicos.
 
+## Estructura del proyecto
+
+RUNAWAY/
+├── api/
+│   ├── compras.php
+│   ├── login.php
+│   ├── logout.php
+│   ├── perfil.php
+│   ├── productos.php
+│   ├── registro.php
+│   ├── respuesta.php
+│   └── tarifas.php
+├── config/
+│   └── conexion.php
+├── db/
+│   └── backend.sql
+├── docs/
+│   └── API_REST.md
+├── js/
+│   ├── vistas/
+│   │   ├── catalogo.js
+│   │   ├── comprar.js
+│   │   ├── detalle.js
+│   │   └── inicio.js
+│   ├── anuncios.js
+│   ├── api.js
+│   ├── dom.js
+│   └── router.js
+├── models/
+│   ├── CompraModel.php
+│   ├── ProductoModel.php
+│   ├── TarifaModel.php
+│   └── UsuarioModel.php
+├── index.html
+├── cuenta.html
+├── inventario.html
+├── app.js
+├── auth.js
+├── inventario.js
+├── style.css
+├── auth.css
+└── README.md
+
 ### Backend
 
 Desarrollado con:
