@@ -43,7 +43,8 @@ CREATE TABLE IF NOT EXISTS cupones (
     descripcion  VARCHAR(160) NOT NULL,
     activo       TINYINT(1) NOT NULL DEFAULT 1,
     fecha_inicio DATETIME NULL,
-    fecha_fin    DATETIME NULL
+    fecha_fin    DATETIME NULL,
+    CONSTRAINT chk_cupon_porcentaje CHECK (porcentaje <= 100)
 ) ENGINE=InnoDB;
 
 -- CU06/CU07: datos de checkout, confirmación y consulta del pedido.

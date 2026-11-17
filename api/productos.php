@@ -9,13 +9,23 @@ function validar_producto(array $entrada): array
 {
     $camposTexto = ['ref', 'nombre', 'categoria', 'especificacion'];
     foreach ($camposTexto as $campo) {
-        if (!isset($entrada[$campo]) || trim((string) $entrada[$campo]) === '') {
+        if (!isset($entrada[$campo]) || !is_scalar($entrada[$campo])
+            || trim((string) $entrada[$campo]) === '') {
             responder_json(400, ['estado' => 'error', 'mensaje' => "El campo {$campo} es obligatorio."]);
         }
     }
 
-    if (!isset($entrada['precio']) || !is_numeric($entrada['precio']) || (float) $entrada['precio'] < 0) {
-        responder_json(400, ['estado' => 'error', 'mensaje' => 'El precio debe ser un número mayor o igual a cero.']);
+    $limites = ['ref' => 20, 'nombre' => 120, 'subtitulo' => 180, 'categoria' => 80, 'imagen' => 255];
+    foreach ($limites as $campo => $limite) {
+        $valor = $entrada[$campo] ?? '';
+        if (!is_scalar($valor) || strlen((string) $valor) > $limite) {
+            responder_json(400, ['estado' => 'error', 'mensaje' => "El campo {$campo} supera la longitud permitida."]);
+        }
+    }
+
+    if (!isset($entrada['precio']) || !is_numeric($entrada['precio'])
+        || (float) $entrada['precio'] < 0 || (float) $entrada['precio'] > 9999999999.99) {
+        responder_json(400, ['estado' => 'error', 'mensaje' => 'El precio debe estar entre 0 y 9.999.999.999,99.']);
     }
 
     foreach (['stock', 'umbralCritico'] as $campo) {
@@ -29,7 +39,23 @@ function validar_producto(array $entrada): array
 
     $talles = $entrada['talles'] ?? '';
     if (is_array($talles)) {
+        foreach ($talles as $talle) {
+            if (!is_scalar($talle)) {
+                responder_json(400, ['estado' => 'error', 'mensaje' => 'Cada talle debe ser texto.']);
+            }
+        }
         $talles = implode(',', array_map('strval', $talles));
+    } elseif (!is_scalar($talles)) {
+        responder_json(400, ['estado' => 'error', 'mensaje' => 'El campo talles debe ser texto o una lista.']);
+    }
+    if (strlen((string) $talles) > 120) {
+        responder_json(400, ['estado' => 'error', 'mensaje' => 'La lista de talles supera la longitud permitida.']);
+    }
+
+    $imagen = trim((string) ($entrada['imagen'] ?? ''));
+    if ($imagen !== '' && (preg_match('#^assets/[A-Za-z0-9._/-]+$#D', $imagen) !== 1
+        || preg_match('#(^|/)\.\.(/|$)#', $imagen) === 1)) {
+        responder_json(400, ['estado' => 'error', 'mensaje' => 'La imagen debe pertenecer a la carpeta assets/.']);
     }
 
     return [
@@ -40,7 +66,7 @@ function validar_producto(array $entrada): array
         'especificacion' => trim((string) $entrada['especificacion']),
         'talles' => trim((string) $talles),
         'precio' => number_format((float) $entrada['precio'], 2, '.', ''),
-        'imagen' => trim((string) ($entrada['imagen'] ?? '')),
+        'imagen' => $imagen,
         'stock' => (int) ($entrada['stock'] ?? 0),
         'umbralCritico' => (int) ($entrada['umbralCritico'] ?? 0),
     ];
