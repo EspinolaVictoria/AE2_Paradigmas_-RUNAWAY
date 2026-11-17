@@ -44,7 +44,8 @@ export async function obtenerProducto(id) {
 }
 
 export function obtenerTarifas(productoId) {
-    return pedir("api/tarifas.php?producto_id=" + encodeURIComponent(productoId));
+    const consulta = productoId ? "?producto_id=" + encodeURIComponent(productoId) : "";
+    return pedir("api/tarifas.php" + consulta);
 }
 
 export async function crearCompra(datos) {
