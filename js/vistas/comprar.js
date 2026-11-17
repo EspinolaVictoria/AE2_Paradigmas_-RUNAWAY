@@ -20,6 +20,13 @@ export async function vistaComprar(parametros) {
     const selectTalle = raiz.getElementById("talleCompra");
     const mensaje = raiz.getElementById("mensajeCompra");
     const botonEnviar = raiz.querySelector("button[type='submit']");
+    // Las referencias se toman ahora: al insertar el fragmento en la página queda vacío.
+    const campoCupon = raiz.getElementById("codigoCupon");
+    const botonCupon = raiz.getElementById("botonCupon");
+    const textoTalle = raiz.getElementById("talleProducto");
+    const textoSubtotal = raiz.getElementById("subtotalProducto");
+    const textoDescuento = raiz.getElementById("descuentoProducto");
+    const textoTotal = raiz.getElementById("totalProducto");
 
     const estado = { descuento: 0, cupon: null };
 
@@ -39,11 +46,11 @@ export async function vistaComprar(parametros) {
     function actualizarResumen() {
         const subtotal = producto.precioUnitario * unidades();
         const total = Math.round(subtotal * (1 - estado.descuento / 100));
-        raiz.getElementById("talleProducto").textContent = selectTalle.value;
-        raiz.getElementById("subtotalProducto").textContent = formatearPrecio(subtotal);
-        raiz.getElementById("descuentoProducto").textContent =
+        textoTalle.textContent = selectTalle.value;
+        textoSubtotal.textContent = formatearPrecio(subtotal);
+        textoDescuento.textContent =
             estado.descuento > 0 ? "−" + estado.descuento + "%" : "—";
-        raiz.getElementById("totalProducto").textContent = formatearPrecio(total);
+        textoTotal.textContent = formatearPrecio(total);
     }
 
     // Datos fijos del producto elegido.
@@ -67,6 +74,23 @@ export async function vistaComprar(parametros) {
         mostrarMensaje("Este producto no tiene stock disponible.", "mensaje-error");
     }
 
+    function aplicarCupon() {
+        const codigo = campoCupon.value.trim().toUpperCase();
+        const promocion = tarifas.descuentos[codigo];
+
+        if (codigo === "" || !promocion) {
+            estado.descuento = 0;
+            estado.cupon = null;
+            mostrarMensaje(codigo === "" ? "Ingresá un código de descuento." : "Código inválido o vencido.", "mensaje-error");
+        } else {
+            estado.descuento = Number(promocion.porcentaje);
+            estado.cupon = codigo;
+            mostrarMensaje("¡Cupón aplicado! Tenés un " + estado.descuento + "% de descuento.", "mensaje-exito");
+        }
+        actualizarResumen();
+    }
+
+    botonCupon.addEventListener("click", aplicarCupon);
     cantidad.addEventListener("input", actualizarResumen);
     selectTalle.addEventListener("change", actualizarResumen);
     actualizarResumen();
