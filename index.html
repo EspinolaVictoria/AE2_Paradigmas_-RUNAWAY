@@ -7,29 +7,39 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="barra-superior">
-        <a class="marca" href="index.html">RUNAWAY</a>
+    <a class="salto-contenido" href="#contenido-principal">Saltar al contenido</a>
+
+    <nav class="barra-superior" aria-label="Navegación principal">
+        <a class="marca" href="#/">RUNAWAY</a>
         <ul class="menu-principal">
-            <li><a href="index.html">Inicio</a></li>
-            <li class="dropdown">
-                <a href="listado_box.html">Colección</a>
-                <ul class="menu-desplegable">
-                    <li><a href="listado_box.html">Todos los productos</a></li>
-                    <li><a href="producto.html">Pieza destacada</a></li>
-                </ul>
-            </li>
-            <li><a href="comprar.html">Comprar</a></li>
+            <li><a href="#/" data-ruta="inicio">Inicio</a></li>
+            <li><a href="#/catalogo" data-ruta="catalogo">Colección</a></li>
+            <li><a href="#/comprar" data-ruta="comprar">Comprar</a></li>
             <li><a href="inventario.html">Inventario</a></li>
             <li><a href="cuenta.html">Cuenta</a></li>
         </ul>
     </nav>
 
+    <main id="contenido-principal" tabindex="-1">
+        <p class="estado-carga-spa">Cargando…</p>
+    </main>
+
+    <footer class="pie">
+        <span>RUNAWAY © 2026</span>
+        <span>Posadas · Argentina</span>
+    </footer>
+
+    <!-- Región viva: los lectores de pantalla anuncian aquí los cambios de vista y de estado. -->
+    <div id="anuncios" class="solo-lectores" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Plantillas estáticas: la SPA las clona, no inserta HTML en tiempo de ejecución. -->
+    <template id="tpl-inicio">
     <header class="hero">
         <div class="hero-copy">
             <p class="kicker">NOCTURNE / CHAPTER 01</p>
             <h1>RUNAWAY</h1>
             <p class="hero-line">Luxury streetwear built outside the expected.</p>
-            <a class="btn-principal" href="listado_box.html">Explorar colección →</a>
+            <a class="btn-principal" href="#/catalogo">Explorar colección →</a>
         </div>
         <div class="hero-art">
             <img src="assets/liquid-chrome.svg" alt="Escultura de cromo líquido rosa y violeta" class="chrome-liquid">
@@ -43,7 +53,7 @@
         <h2>Sharp silhouettes.<br><em>Liquid surfaces.</em><br>Dark character.</h2>
         <div class="intro-bottom">
             <p>RUNAWAY combina proporciones amplias, materiales pesados y una dirección visual inspirada en metal, reflejos nocturnos y fotografía editorial.</p>
-            <a href="producto.html" class="link-line">Descubrir pieza 001 →</a>
+            <a href="#/catalogo" class="link-line">Descubrir pieza 001 →</a>
         </div>
     </section>
 
@@ -84,7 +94,7 @@
                     <span>01 / HOODIE</span>
                     <h3>Nocturne Hoodie</h3>
                     <p>$245.000</p>
-                    <a href="producto.html">Ver detalle →</a>
+                    <a href="#/catalogo">Ver detalle →</a>
                 </div>
             </article>
             <article class="featured-card">
@@ -93,7 +103,7 @@
                     <span>02 / TEE</span>
                     <h3>Obsidian Tee</h3>
                     <p>$135.000</p>
-                    <a href="producto.html">Ver detalle →</a>
+                    <a href="#/catalogo">Ver detalle →</a>
                 </div>
             </article>
             <article class="featured-card">
@@ -102,7 +112,7 @@
                     <span>03 / CARGO</span>
                     <h3>Armor Cargo</h3>
                     <p>$289.000</p>
-                    <a href="producto.html">Ver detalle →</a>
+                    <a href="#/catalogo">Ver detalle →</a>
                 </div>
             </article>
         </div>
@@ -115,10 +125,173 @@
             <h2>FROM THE EXPECTED</h2>
         </div>
     </section>
+    </template>
 
-    <footer class="pie">
-        <span>RUNAWAY © 2026</span>
-        <span>Posadas · Argentina</span>
-    </footer>
+    <template id="tpl-catalogo">
+    <div class="catalog-page">
+        <section class="catalog-hero">
+            <div>
+                <p class="kicker">COLLECTION / CHAPTER 01</p>
+                <h1>NOCTURNE</h1>
+                <p>Una selección de piezas de streetwear de lujo con volúmenes amplios, negro profundo y detalles metálicos.</p>
+            </div>
+            <img src="assets/liquid-chrome.svg" alt="Cromo líquido" class="catalog-chrome">
+        </section>
+
+        <section class="catalog-editorial">
+            <div class="editorial-photo">
+                <img src="assets/campaign-mid.jpg" alt="Campaña RUNAWAY Nocturne">
+                <span class="editorial-tag tag-one">RUNAWAY / NOCTURNE</span>
+                <span class="editorial-tag tag-two">CHAPTER 01</span>
+            </div>
+            <div class="editorial-copy">
+                <p class="kicker">CAMPAIGN NOTE</p>
+                <h2>Designed for presence.</h2>
+                <p>La colección prioriza siluetas dominantes y una paleta oscura. Cada pieza está pensada para sostener una identidad visual fuerte sin perder funcionalidad.</p>
+            </div>
+        </section>
+
+        <section class="table-wrap">
+            <div class="table-title">
+                <div>
+                    <p class="kicker">PRODUCT INDEX</p>
+                    <h2>Available pieces</h2>
+                </div>
+                <span id="contadorCatalogo" role="status">CARGANDO / DROP 01</span>
+            </div>
+
+            <form class="catalog-controls" role="search" aria-label="Buscar en el catálogo">
+                <div class="field-group catalog-search-field">
+                    <label for="campoBuscar">Buscar pieza</label>
+                    <input type="search" id="campoBuscar" placeholder="Nombre, referencia o descripción" autocomplete="off">
+                </div>
+                <div class="field-group catalog-category-field">
+                    <label for="selectCategoria">Categoría</label>
+                    <select id="selectCategoria">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+                <button type="button" id="botonLimpiar" class="btn-secundario">Limpiar</button>
+            </form>
+            <div class="tabla-responsive">
+                <table class="tabla-productos">
+                    <caption class="solo-lectores">Piezas disponibles de la colección</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Ref.</th>
+                            <th scope="col">Visual</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Especificación</th>
+                            <th scope="col">Talles</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col"><span class="solo-lectores">Acciones</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoCatalogo"><tr><td colspan="7" class="catalogo-sin-resultados">Cargando catálogo...</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    </template>
+
+    <template id="tpl-detalle">
+        <div class="product-page">
+            <section class="product-visual-panel">
+                <div class="product-hero-image">
+                    <img id="detalleImagen" src="" alt="">
+                    <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span>
+                </div>
+                <div class="product-index" id="detalleRef"></div>
+            </section>
+
+            <section class="product-info-panel">
+                <div class="product-heading">
+                    <p class="kicker" id="detalleKicker"></p>
+                    <h1 id="detalleNombre"></h1>
+                    <p class="product-price" id="detallePrecio"></p>
+                </div>
+                <p class="product-description" id="detalleDescripcion"></p>
+
+                <div class="product-spec-grid" id="detalleSpecs"></div>
+
+                <div class="size-block" role="group" aria-labelledby="etiquetaTalle">
+                    <span id="etiquetaTalle">Seleccionar talle</span>
+                    <div class="sizes" id="detalleTalles"></div>
+                </div>
+
+                <p id="detalleStock" class="mensaje-cupon"></p>
+                <a class="btn-principal full" id="detalleComprar" href="#/comprar">Comprar ahora →</a>
+                <p><a class="link-line" href="#/catalogo">← Volver a la colección</a></p>
+            </section>
+        </div>
+    </template>
+
+    <template id="tpl-comprar">
+        <div class="checkout-page">
+            <section class="checkout-heading">
+                <p class="kicker">CHECKOUT / RUNAWAY</p>
+                <h1>Finalizar compra</h1>
+                <p>Completá tus datos y revisá el pedido antes de confirmar.</p>
+            </section>
+
+            <section class="checkout-layout">
+                <div class="checkout-form-card">
+                    <form class="formulario-compra" id="formCompra" novalidate>
+                        <div class="field-group">
+                            <label for="nombre">Nombre del cliente</label>
+                            <input type="text" id="nombre" name="nombre" placeholder="Nombre y apellido" autocomplete="name" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="direccion">Dirección</label>
+                            <input type="text" id="direccion" name="direccion" placeholder="Dirección de entrega" autocomplete="street-address" required>
+                        </div>
+                        <div class="fields-two">
+                            <div class="field-group"><label for="telefono">Teléfono</label><input type="tel" id="telefono" name="telefono" placeholder="3764 000000" autocomplete="tel" required></div>
+                            <div class="field-group"><label for="email">E-mail</label><input type="email" id="email" name="email" placeholder="nombre@email.com" autocomplete="email" required></div>
+                        </div>
+                        <div class="field-group">
+                            <label for="pago">Medio de pago</label>
+                            <select id="pago" name="pago" required>
+                                <option value="">Seleccionar</option>
+                                <option value="tarjeta_credito">Tarjeta de crédito</option>
+                                <option value="tarjeta_debito">Tarjeta de débito</option>
+                                <option value="transferencia">Transferencia bancaria</option>
+                                <option value="mercado_pago">Mercado Pago</option>
+                            </select>
+                        </div>
+                        <div class="fields-two">
+                            <div class="field-group">
+                                <label for="talleCompra">Talle</label>
+                                <select id="talleCompra" name="talle"></select>
+                            </div>
+                            <div class="field-group">
+                                <label for="cantidadProducto">Cantidad</label>
+                                <input type="number" id="cantidadProducto" name="cantidadProducto" min="1" value="1" inputmode="numeric">
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="codigoCupon">Código de descuento</label>
+                            <input type="text" id="codigoCupon" name="codigoCupon" placeholder="Ingresá tu cupón" autocomplete="off">
+                            <button type="button" id="botonCupon" class="btn-secundario">Aplicar cupón</button>
+                        </div>
+                        <p id="mensajeCompra" class="mensaje-cupon" aria-live="polite"></p>
+                        <button class="btn-principal full" type="submit">Confirmar pedido →</button>
+                    </form>
+                </div>
+
+                <aside class="order-card" aria-label="Resumen del pedido">
+                    <div class="order-image"><img id="imagenProducto" src="" alt=""></div>
+                    <div class="order-title"><span id="referenciaProducto"></span><h2 id="nombreProducto"></h2></div>
+                    <div class="order-row"><span>Talle</span><strong id="talleProducto"></strong></div>
+                    <div class="order-row"><span>Precio unitario</span><strong id="precioUnitario"></strong></div>
+                    <div class="order-row"><span>Subtotal</span><strong id="subtotalProducto"></strong></div>
+                    <div class="order-row"><span>Descuento</span><strong id="descuentoProducto">—</strong></div>
+                    <div class="order-total"><span>Total</span><strong id="totalProducto"></strong></div>
+                </aside>
+            </section>
+        </div>
+    </template>
+
+    <script type="module" src="app.js"></script>
 </body>
 </html>
