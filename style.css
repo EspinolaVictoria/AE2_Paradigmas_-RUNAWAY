@@ -875,3 +875,18 @@ summary:focus-visible {
 
 /* El contenedor recibe foco por código al cambiar de vista; no necesita anillo. */
 #contenido-principal:focus { outline: none; }
+
+/* Enlace para saltar la barra de navegación: visible solo al recibir foco. */
+.salto-contenido {
+    position: absolute;
+    left: 16px;
+    top: -60px;
+    z-index: 100;
+    padding: 12px 18px;
+    background: #e9e5e1;
+    color: #080808;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.salto-contenido:focus { top: 16px; }

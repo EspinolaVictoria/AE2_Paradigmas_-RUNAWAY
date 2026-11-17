@@ -53,3 +53,9 @@ iniciarRouter(mostrar, function () {
     contenedor.appendChild(vistaNoEncontrada());
     terminarNavegacion("página no encontrada");
 });
+
+// El enlace "Saltar al contenido" no puede usar un ancla: el hash lo gestiona el router.
+document.querySelector(".salto-contenido").addEventListener("click", function (evento) {
+    evento.preventDefault();
+    contenedor.focus();
+});
